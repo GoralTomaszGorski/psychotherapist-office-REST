@@ -20,7 +20,7 @@ public class PatientService {
     }
 
     public Optional<Patient> findPatientById(long id){
-        return patientRepository.findById(id);
+        return patientRepository.findPatientById(id);
     }
 
 
