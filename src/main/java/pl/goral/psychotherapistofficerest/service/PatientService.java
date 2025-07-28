@@ -14,14 +14,11 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-
-    public List<Patient> findAllPatients(){
+    public List<Patient> findAllPatients() {
         return patientRepository.findAll();
     }
 
-    public Optional<Patient> findPatientById(long id){
-        return patientRepository.findPatientById(id);
+    public Optional<Patient> findPatientById(long id) {
+        return patientRepository.findById(id);
     }
-
-
 }

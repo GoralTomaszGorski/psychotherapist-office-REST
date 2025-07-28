@@ -8,6 +8,7 @@ import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.service.PatientService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class PatientController {
     }
 
     @GetMapping("/patients/{id}")
-    public List<Patient> getPatientById(@PathVariable Long id){
-        return patientService.findAllPatients();
+    public Optional<Patient> getPatientById(@PathVariable Long id){
+        return patientService.findPatientById(id);
     }
 
 
