@@ -7,7 +7,7 @@ CREATE TABLE patient (
                          email VARCHAR(40),
                          telephone VARCHAR(20),
                          year_of_brith INT,
-                         join_date VARCHAR(63),
+                         join_date TIMESTAMP,
                          information VARCHAR(1023),
                          approval BOOLEAN
 );
@@ -17,7 +17,7 @@ CREATE TABLE therapy (
                          id INT PRIMARY KEY AUTO_INCREMENT,
                          kind_of_therapy VARCHAR(255),
                          description TEXT,
-                         price INT
+                         price DECIMAL(10,2)
 );
 
 -- Create calender table
@@ -59,10 +59,15 @@ CREATE TABLE user_role (
 CREATE TABLE user_roles (
                             user_id INT,
                             role_id INT,
-                            FOREIGN KEY (user_id) REFERENCES users(id),
-                            FOREIGN KEY (role_id) REFERENCES user_role(id),
-                            PRIMARY KEY (user_id, role_id)
+                            CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users(id),
+                            CONSTRAINT fk_user_roles_role FOREIGN KEY (role_id) REFERENCES user_role(id),
+                            CONSTRAINT pk_user_roles PRIMARY KEY (user_id, role_id)
 );
+
+-- Create indexes for user_roles table
+CREATE INDEX fk_user_roles_user_id_index_c ON user_roles (user_id);
+CREATE INDEX fk_user_roles_role_id_index_c ON user_roles (role_id);
+
 
 -- Create change_password table
 CREATE TABLE change_password (
