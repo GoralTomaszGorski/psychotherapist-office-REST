@@ -14,7 +14,7 @@ CREATE TABLE patient (
 
 -- Create therapy table
 CREATE TABLE therapy (
-                         id INT PRIMARY KEY AUTO_INCREMENT,
+                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          kind_of_therapy VARCHAR(255),
                          description TEXT,
                          price DECIMAL(10,2)
@@ -22,7 +22,7 @@ CREATE TABLE therapy (
 
 -- Create calender table
 CREATE TABLE calender (
-                          id INT PRIMARY KEY AUTO_INCREMENT,
+                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
                           patient_id INT,
                           dayOf VARCHAR(20),
                           time VARCHAR(10),
