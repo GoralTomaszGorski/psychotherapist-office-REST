@@ -1,9 +1,15 @@
 package pl.goral.psychotherapistofficerest.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Therapy {
     @Id
@@ -14,37 +20,4 @@ public class Therapy {
     private String kindOfTherapy;
     private String description;
     private BigDecimal price;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getKindOfTherapy() {
-        return kindOfTherapy;
-    }
-
-    public void setKindOfTherapy(String kindOfTherapy) {
-        this.kindOfTherapy = kindOfTherapy;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 }
