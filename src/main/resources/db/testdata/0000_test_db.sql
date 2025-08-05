@@ -89,5 +89,6 @@ CREATE TABLE counter (
                          ip VARCHAR(20),
                          refresh BIGINT,
                          entry BIGINT,
-                         date DATE
+                         date DATE,
+                         url VARCHAR(255)
 );
