@@ -1,17 +1,38 @@
 package pl.goral.psychotherapistofficerest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
 import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
 import pl.goral.psychotherapistofficerest.model.Patient;
 
-@Mapper(componentModel = "spring")
-public interface PatientMapper {
+@Component
+public class PatientMapper {
 
-    @Mapping(target = "id", ignore = true) // Ignoruj id, bo jest generowane przez bazę
-    @Mapping(target = "joinDate", ignore = true) // Ignoruj joinDate, ustawiane w serwisie
-    Patient toEntity(PatientRequestDTO dto);
+    public Patient toEntity(PatientRequestDTO dto) {
+        Patient patient = new Patient();
+        patient.setNick(dto.nick());
+        patient.setName(dto.name());
+        patient.setSurname(dto.surname());
+        patient.setEmail(dto.email());
+        patient.setTelephone(dto.telephone());
+        patient.setYearOfBrith(dto.yearOfBirth());
+        patient.setInformation(dto.information());
+        patient.setApproval(dto.approval());
+        return patient;
+    }
 
-    PatientResponseDTO toResponseDTO(Patient patient);
+    public PatientResponseDTO toResponseDTO(Patient patient) {
+        return new PatientResponseDTO(
+                patient.getId(),
+                patient.getNick(),
+                patient.getName(),
+                patient.getSurname(),
+                patient.getEmail(),
+                patient.getTelephone(),
+                patient.getYearOfBrith(),
+                patient.getJoinDate(),
+                patient.getInformation(),
+                patient.isApproval()
+        );
+    }
 }
