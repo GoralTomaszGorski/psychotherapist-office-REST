@@ -6,11 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "pl.goral.psychotherapistofficerest.repository")
+@EntityScan(basePackages = "pl.goral.psychotherapistofficerest.model")
+
 public class PsychotherapistOfficeRestApplication {
+
 
 
     private static final Logger logger = LoggerFactory.getLogger(PsychotherapistOfficeRestApplication.class);
