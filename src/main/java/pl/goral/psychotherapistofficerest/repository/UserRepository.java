@@ -1,12 +1,10 @@
 package pl.goral.psychotherapistofficerest.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import pl.goral.psychotherapistofficerest.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import pl.goral.psychotherapistofficerest.model.AppUser;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findByEmail(String email);
-    User findUsersByEmail(String email);
-
+public interface UserRepository extends JpaRepository<AppUser, Long> {
+    Optional<AppUser> findByEmail(String email);
 }
