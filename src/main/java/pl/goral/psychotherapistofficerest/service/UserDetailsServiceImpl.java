@@ -1,13 +1,17 @@
 package pl.goral.psychotherapistofficerest.service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import pl.goral.psychotherapistofficerest.dto.UserDto;
+import pl.goral.psychotherapistofficerest.mapper.UserMapper;
 import pl.goral.psychotherapistofficerest.model.AppUser;
 import pl.goral.psychotherapistofficerest.repository.UserRepository;
 
@@ -16,42 +20,43 @@ import pl.goral.psychotherapistofficerest.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder; // potrzebny do mapowania DTO → encja
+    private final UserMapper userMapper;
 
-        /**
-     * Metoda potrzebna Spring Security do autoryzacji
-     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
     }
 
-    /**
-     * Pobiera wszystkich użytkowników (np. do panelu admina)
-     */
-    public List<AppUser> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(
+                        UserMapper::toDto)
+                .collect(Collectors.toList()
+                );
     }
 
-    /**
-     * Pobiera użytkownika po ID
-     */
-    public AppUser getUserById(Long id) {
-        return userRepository.findById(id)
+    public UserDto getUserById(Long id) {
+        AppUser user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        return UserMapper.toDto(user);
     }
 
-    /**
-     * Pobiera użytkownika po emailu
-     */
-    public AppUser getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public UserDto getUserByEmail(String email) {
+        AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User with email " + email + " not found"));
+        return UserMapper.toDto(user);
+
     }
 
-    /**
-     * Usuwanie użytkownika
-     */
+    public UserDto createUser(UserDto dto) {
+        AppUser user = UserMapper.toEntity(dto, passwordEncoder);
+        AppUser saved = userRepository.save(user);
+        return UserMapper.toDto(saved);
+    }
+
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User with id " + id + " not found");
