@@ -21,12 +21,17 @@ public class PatientService {
     private final DateInWarsaw dateInWarsaw;
     private final PatientMapper patientMapper;
 
-    public List<Patient> findAllPatients() {
-        return patientRepository.findAll();
+    public List<PatientResponseDTO> findAllPatients() {
+        return patientRepository.findAll()
+                .stream()
+                .map(patientMapper::toResponseDTO)
+                .toList();
     }
 
-    public Optional<Patient> findPatientById(long id) {
-        return patientRepository.findById(id);
+
+    public Optional<PatientResponseDTO> findPatientById(long id) {
+                return patientRepository.findById(id)
+                        .map(patientMapper::toResponseDTO);
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO request) {
