@@ -1,42 +1,45 @@
 package pl.goral.psychotherapistofficerest.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import pl.goral.psychotherapistofficerest.dto.UserDto;
-import pl.goral.psychotherapistofficerest.model.AppUser;
 import pl.goral.psychotherapistofficerest.service.UserDetailsServiceImpl;
 
-
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.hibernate.Hibernate.map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserDetailsServiceImpl userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers().stream()
-                .map(user -> new UserDto(
-                        user.getId(), 
-                        user.getEmail(),
-                        user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toSet())))
-                .collect(Collectors.toList());
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        UserDto created = userService.createUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
 }
