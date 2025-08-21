@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import pl.goral.psychotherapistofficerest.config.JwtService;
+import pl.goral.psychotherapistofficerest.config.jwt.JwtService;
 import pl.goral.psychotherapistofficerest.model.AppUser;
 import pl.goral.psychotherapistofficerest.model.UserRole;
 import pl.goral.psychotherapistofficerest.repository.UserRepository;

@@ -1,4 +1,4 @@
-package pl.goral.psychotherapistofficerest.config;
+package pl.goral.psychotherapistofficerest.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
