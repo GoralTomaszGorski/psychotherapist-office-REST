@@ -1,6 +1,7 @@
 package pl.goral.psychotherapistofficerest.service;
 import java.util.List;
 
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,11 +13,11 @@ import pl.goral.psychotherapistofficerest.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    /**
+        /**
      * Metoda potrzebna Spring Security do autoryzacji
      */
     @Override
