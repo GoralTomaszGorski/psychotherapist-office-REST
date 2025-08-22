@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,6 @@ public class Therapy {
     private Long id;
     @Column(name = "KIND_OF_THERAPY")
     private String kindOfTherapy;
-        @Lob
 
     private String description;
     private BigDecimal price;

@@ -1,5 +1,5 @@
 insert into patient
-(nick, name, surname, telephone, year_of_brith, JOIN_DATE, email, information, approval)
+(nick, name, surname, telephone, year_of_birth, JOIN_DATE, email, information, approval)
 
 values
 

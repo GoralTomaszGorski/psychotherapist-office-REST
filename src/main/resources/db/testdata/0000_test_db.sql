@@ -1,13 +1,13 @@
 -- Create patient table
 CREATE TABLE
     patient (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         nick VARCHAR(40),
         name VARCHAR(40),
         surname VARCHAR(40),
         email VARCHAR(40),
         telephone VARCHAR(20),
-        year_of_brith INT,
+        year_of_birth INT,
         join_date TIMESTAMP,
         information VARCHAR(1023),
         approval BOOLEAN
@@ -16,16 +16,16 @@ CREATE TABLE
 -- Create therapy table
 CREATE TABLE
     therapy (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         kind_of_therapy VARCHAR(255),
-        description CLOB,
+        description TEXT,
         price DECIMAL(10, 2)
     );
 
 -- Create calender table
 CREATE TABLE
     calender (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         patient_id BIGINT,
         dayOf VARCHAR(20),
         time VARCHAR(10),
@@ -36,7 +36,7 @@ CREATE TABLE
 -- Create appointment table
 CREATE TABLE
     appointment (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         patient_id BIGINT,
         therapy_id BIGINT,
         calender_id BIGINT,
@@ -48,7 +48,7 @@ CREATE TABLE
 -- Create users table
 CREATE TABLE
     users (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL
     );
@@ -56,7 +56,7 @@ CREATE TABLE
 -- Table: roles
 CREATE TABLE
     roles (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         description VARCHAR(255)
     );
@@ -79,7 +79,7 @@ CREATE INDEX fk_user_roles_role_id_index_c ON user_roles (role_id);
 -- Create change_password table
 CREATE TABLE
     change_password (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         patient_id BIGINT,
         old_password VARCHAR(255),
         new_password VARCHAR(255),
@@ -92,7 +92,7 @@ CREATE TABLE
 -- Create counter table
 CREATE TABLE
     counter (
-        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+        id BIGSERIAL PRIMARY KEY,
         session_id VARCHAR(255),
         ip VARCHAR(20),
         refresh BIGINT,
