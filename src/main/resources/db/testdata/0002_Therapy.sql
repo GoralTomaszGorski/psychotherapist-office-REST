@@ -26,16 +26,16 @@ komunikację i interakcje społeczne. Poza pracą nad objawami i trudnościami, 
 uczestnictwo w terapii grupowej daje również szansę na zwiększenie pewności siebie,
 samodzielności i poczucia bezpieczeństwa w relacjach interpersonalnych.', 100);
 insert into therapy (kind_of_therapy, description, price) values ('Terapia par', 'Terapia par (terapia małżeńska) jest szczególną formą psychoterapii, w której uczestniczy
-małżeństwo lub osoby pozostające w innym związku partnerskim, przeżywające kryzys
-i narastające nieporozumienia. Rozmowa z psychoterapeutą daje parze szansę na zmianę,
-pozwala inaczej spojrzeć na kryzys, pomaga w zrozumieniu uczuć, myśli i potrzeb
-stanowiących źródło nieprawidłowych relacji, daje możliwość spojrzenia z boku na relacje
-między partnerami, a tym samym pomaga w lepszym zrozumieniu siebie nawzajem,
-co przekłada się na polepszenie jakości relacji. Podczas spotkań partnerzy namawiani
-są do tego, by odważnie i otwarcie mówić o swoich uczuciach. Czasem, by rozwiązać
-problem, wystarczy go sobie w pełni uświadomić. Dlatego szczera rozmowa w atmosferze
-wzajemnego zrozumienia jest tak ważna. Psychoterapeuta pomaga parom ustalić nowe zasady
-funkcjonowania we dwoje i przywrócić równowagę w związku. Terapia par jest wskazana dla
+małżeństwo lub osoby pozostające w innym związku partnerskim, przeżywające kryzys
+i narastające nieporozumienia. Rozmowa z psychoterapeutą daje parze szansę na zmianę,
+pozwala inaczej spojrzeć na kryzys, pomaga w zrozumieniu uczuć, myśli i potrzeb
+stanowiących źródło nieprawidłowych relacji, daje możliwość spojrzenia z boku na relacje
+między partnerami, a tym samym pomaga w lepszym zrozumieniu siebie nawzajem,
+co przekłada się na polepszenie jakości relacji. Podczas spotkań partnerzy namawiani
+są do tego, by odważnie i otwarcie mówić o swoich uczuciach. Czasem, by rozwiązać
+problem, wystarczy go sobie w pełni uświadomić. Dlatego szczera rozmowa w atmosferze
+wzajemnego zrozumienia jest tak ważna. Psychoterapeuta pomaga parom ustalić nowe zasady
+funkcjonowania we dwoje i przywrócić równowagę w związku. Terapia par jest wskazana dla
 par, które doświadczają powtarzających się kłótni, wzajemnej wrogości, częstego
 krytycyzmu, gdy utrzymuje się poczucie osamotnienia i niezrozumienia przez partnera. Bywa
 że para podejmowała już liczne próby naprawienia relacji co kończyło się kolejnym sporem,
