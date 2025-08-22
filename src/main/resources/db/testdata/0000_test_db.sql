@@ -30,8 +30,8 @@ CREATE TABLE calender (
                           FOREIGN KEY (patient_id) REFERENCES patient(id)
 );
 
--- Create meeting table
-CREATE TABLE meeting (
+-- Create appointment table
+CREATE TABLE appointment (
                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          patient_id BIGINT,
                          therapy_id BIGINT,
