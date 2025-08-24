@@ -12,9 +12,9 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-    @Table(name = "meeting")
+    @Table(name = "appointment")
 
-    public class Meeting {
+    public class Appointment {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;

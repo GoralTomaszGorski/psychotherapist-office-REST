@@ -1,11 +1,15 @@
 package pl.goral.psychotherapistofficerest.model;
-import jakarta.persistence.*;
+import java.time.ZonedDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -22,7 +26,7 @@ public class Patient {
     private String surname;
     private String email;
     private String telephone;
-    @Column(name = "YEAR_OF_BRITH")
+    @Column(name = "YEAR_OF_BIRTH")
     private int yearOfBrith;
     @Column(name = "JOIN_DATE")
     private ZonedDateTime joinDate;
