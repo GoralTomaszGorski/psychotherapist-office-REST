@@ -1,6 +1,7 @@
 package pl.goral.psychotherapistofficerest.service;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import pl.goral.psychotherapistofficerest.config.jwt.JwtService;
+import pl.goral.psychotherapistofficerest.dto.UserDto;
+import pl.goral.psychotherapistofficerest.dto.request.RegisterRequestDto;
+import pl.goral.psychotherapistofficerest.mapper.UserMapper;
 import pl.goral.psychotherapistofficerest.model.AppUser;
 import pl.goral.psychotherapistofficerest.model.UserRole;
 import pl.goral.psychotherapistofficerest.repository.UserRepository;
@@ -25,31 +29,20 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    /**
-     * Rejestracja nowego użytkownika
-     */
-    public void register(AppUser user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("User with email already exists");
+    public void register(RegisterRequestDto dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("User already exists");
         }
+        AppUser user = UserMapper.fromRegisterDto(dto, passwordEncoder);
 
-        // domyślna rola USER
-        UserRole userRole = userRoleRepository.findByName("USER")
+        UserRole role = userRoleRepository.findByName("USER")
                 .orElseThrow(() -> new RuntimeException("Default role USER not found"));
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>() {
-            {
-                add(userRole);
-            }
-        });
+        user.setRoles(Set.of(role));
 
         userRepository.save(user);
     }
 
-    /**
-     * Logowanie i generowanie JWT
-     */
+
     public String login(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
