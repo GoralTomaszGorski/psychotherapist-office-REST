@@ -1,5 +1,7 @@
 package pl.goral.psychotherapistofficerest.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@NoArgsConstructor
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/patients")
 public class PatientController {
