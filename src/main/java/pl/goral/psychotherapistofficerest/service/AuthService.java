@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import pl.goral.psychotherapistofficerest.config.jwt.JwtService;
 import pl.goral.psychotherapistofficerest.dto.UserDto;
 import pl.goral.psychotherapistofficerest.dto.request.RegisterRequestDto;
+import pl.goral.psychotherapistofficerest.dto.response.AuthResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.UserMapper;
 import pl.goral.psychotherapistofficerest.model.AppUser;
 import pl.goral.psychotherapistofficerest.model.UserRole;
@@ -28,27 +29,31 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public void register(RegisterRequestDto dto) {
+    public AuthResponseDto register(RegisterRequestDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("User already exists");
         }
         AppUser user = UserMapper.fromRegisterDto(dto, passwordEncoder);
 
-        UserRole role = userRoleRepository.findByName("USER")
+        UserRole role = userRoleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Default role USER not found"));
         user.setRoles(Set.of(role));
 
         userRepository.save(user);
+
+        String token = jwtService.generateToken(user);
+        return new AuthResponseDto(token, user.getEmail(), user.getId());
     }
 
-    public String login(String email, String password) {
+    public AuthResponseDto login(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
 
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
+        return new AuthResponseDto(token, user.getEmail(), user.getId());
     }
 
     public UserDto createUser(UserDto dto) {
