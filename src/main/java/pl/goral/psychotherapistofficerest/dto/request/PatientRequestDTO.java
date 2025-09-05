@@ -3,7 +3,6 @@ package pl.goral.psychotherapistofficerest.dto.request;
 import jakarta.validation.constraints.*;
 
 public record PatientRequestDTO(
-        @NotBlank(message = "Nick cannot be blank")
         @Size(max = 50, message = "Nick must be less than 50 characters")
         String nick,
 
