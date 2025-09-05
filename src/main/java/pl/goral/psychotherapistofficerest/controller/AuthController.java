@@ -26,15 +26,15 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a new user account with provided email and password")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User registered successfully"),
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterRequestDto request) {
-        authService.register(request);
+        AuthResponseDto response = authService.register(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new AuthResponseDto("User registered successfully", null));
+                .body(response);
     }
 
     @PostMapping("/login")
@@ -45,7 +45,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
-        String token = authService.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(new AuthResponseDto("Login successful", token));
+        AuthResponseDto responseDto = authService.login(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok(responseDto);
     }
 }
