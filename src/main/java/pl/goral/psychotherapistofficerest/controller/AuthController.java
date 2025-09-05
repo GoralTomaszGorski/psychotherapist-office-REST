@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
 import pl.goral.psychotherapistofficerest.dto.request.LoginRequestDto;
 import pl.goral.psychotherapistofficerest.dto.request.RegisterRequestDto;
 import pl.goral.psychotherapistofficerest.dto.response.AuthResponseDto;
@@ -18,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterRequestDto> register(@Valid @RequestBody RegisterRequestDto request) {
+    public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterRequestDto request) {
         authService.register(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -26,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
         String token = authService.login(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(new AuthResponseDto("Login successful", token));
     }

@@ -20,7 +20,6 @@ import pl.goral.psychotherapistofficerest.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // potrzebny do mapowania DTO → encja
     private final UserMapper userMapper;
 
     @Override
@@ -49,12 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("User with email " + email + " not found"));
         return UserMapper.toDto(user);
 
-    }
-
-    public UserDto createUser(UserDto dto) {
-        AppUser user = UserMapper.toEntity(dto, passwordEncoder);
-        AppUser saved = userRepository.save(user);
-        return UserMapper.toDto(saved);
     }
 
     public void deleteUser(Long id) {

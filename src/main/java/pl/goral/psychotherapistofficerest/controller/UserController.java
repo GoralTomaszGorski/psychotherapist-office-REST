@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.goral.psychotherapistofficerest.dto.UserDto;
+import pl.goral.psychotherapistofficerest.service.AuthService;
 import pl.goral.psychotherapistofficerest.service.UserDetailsServiceImpl;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 public class UserController {
 
     private final UserDetailsServiceImpl userService;
+        private final AuthService authService;
+
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
@@ -33,7 +36,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        UserDto created = userService.createUser(userDto);
+        UserDto created = authService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 

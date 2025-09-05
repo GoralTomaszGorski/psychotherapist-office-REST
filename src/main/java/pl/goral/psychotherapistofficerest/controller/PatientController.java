@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@NoArgsConstructor
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/patients")
 public class PatientController {

@@ -18,7 +18,6 @@ import pl.goral.psychotherapistofficerest.model.UserRole;
 import pl.goral.psychotherapistofficerest.repository.UserRepository;
 import pl.goral.psychotherapistofficerest.repository.UserRoleRepository;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -42,7 +41,6 @@ public class AuthService {
         userRepository.save(user);
     }
 
-
     public String login(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
@@ -51,5 +49,11 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return jwtService.generateToken(user);
+    }
+
+    public UserDto createUser(UserDto dto) {
+        AppUser user = UserMapper.toEntity(dto, passwordEncoder);
+        AppUser saved = userRepository.save(user);
+        return UserMapper.toDto(saved);
     }
 }
