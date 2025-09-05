@@ -25,30 +25,36 @@ import pl.goral.psychotherapistofficerest.service.UserDetailsServiceImpl;
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
-        private final JwtService jwtService;
-
+    private final JwtService jwtService;
 
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
         return new JwtAuthFilter(jwtService, userDetailsService);
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/api/index/**",
-                        "/h2-console/**",
-                        "/api/v1/swagger/**",
-                        "/api/v1/docs/**")
-                .permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/user/**").hasRole("USER")
-                .anyRequest().authenticated()
-                )
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/api/v1/docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/api/swagger-ui.html",
+                                "/api/swagger-ui/**",
+                                "/api/**", // do usuniecia po implemntacji
+                                "/api/auth/**",
+                                "/api/index/**",
+                                "/h2-console/**",
+                                "/api/v1/swagger/**",
+                                "/api/v1/docs/**")
+                        .permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

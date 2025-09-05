@@ -11,7 +11,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Psychotherapist API").version("1.0")
+                .info(new Info().title("Psychotherapist API")
+                .version("1.0")
                 .description("Dokumentacja API dla aplikacji Psychotherapist Office REST"));
     }
 }
