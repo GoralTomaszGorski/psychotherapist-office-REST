@@ -3,11 +3,11 @@ package pl.goral.psychotherapistofficerest.controller;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
 import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
 import pl.goral.psychotherapistofficerest.mapper.PatientMapper;
 import pl.goral.psychotherapistofficerest.model.Patient;
@@ -33,5 +33,13 @@ public class PatientController {
     @GetMapping("/{id}")
     public Optional<PatientResponseDTO> getPatientById(@PathVariable Long id){
         return patientService.findPatientById(id);
+    }
+
+    @PostMapping("/")
+    @PreAuthorize("hasAnyRole('ADMIN', 'THERAPIST')")
+
+    public ResponseEntity<PatientResponseDTO> cretePatient(@RequestBody PatientRequestDTO patientRequestDTO){
+        PatientResponseDTO response = patientService.createPatient(patientRequestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
