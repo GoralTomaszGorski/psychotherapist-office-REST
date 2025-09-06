@@ -32,5 +32,4 @@ public class Patient {
     private ZonedDateTime joinDate;
     private String  information;
     private boolean  approval;
-
 }
