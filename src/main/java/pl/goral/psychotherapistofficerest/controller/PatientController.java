@@ -1,5 +1,9 @@
 package pl.goral.psychotherapistofficerest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,8 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/patients")
+@Tag(name = "Patients", description = "Endpoints for managing patients")
+
 public class PatientController {
 
     private final PatientService patientService;
@@ -26,11 +32,24 @@ public class PatientController {
 
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all patients", description = "Returns a list of all registered patients. Accessible only by ADMIN.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Patients retrieved successfully"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public List<PatientResponseDTO> getPatients(){
         return patientService.findAllPatients();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get patient by ID", description = "Returns patient details by their ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Patient found and returned"),
+            @ApiResponse(responseCode = "404", description = "Patient not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+
     public Optional<PatientResponseDTO> getPatientById(@PathVariable Long id){
         return patientService.findPatientById(id);
     }

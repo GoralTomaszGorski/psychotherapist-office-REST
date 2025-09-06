@@ -1,6 +1,8 @@
 package pl.goral.psychotherapistofficerest.dto.request;
 
 import jakarta.validation.constraints.*;
+import pl.goral.psychotherapistofficerest.utils.NotTooYoung;
+
 
 public record PatientRequestDTO(
         @Size(max = 50, message = "Nick must be less than 50 characters")
@@ -22,8 +24,9 @@ public record PatientRequestDTO(
         @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Telephone must be a valid phone number")
         String telephone,
 
-        @Min(value = 1930, message = "Year of birth must be after 1900")
-        @Max(value = 2025, message = "Year of birth cannot be in the future")
+        @Min(value = 1920, message = "Year of birth must be after 1920")
+        @Max(value = 2025, message = "The year of birth cannot be in the future.")
+        @NotTooYoung(message = "You must be older them 10 years old to register.")
         int yearOfBirth,
 
         @Size(max = 1000, message = "Information must be less than 1000 characters")
