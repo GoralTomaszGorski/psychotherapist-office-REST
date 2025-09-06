@@ -50,15 +50,23 @@ public class PatientController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
 
-    public Optional<PatientResponseDTO> getPatientById(@PathVariable Long id){
-        return patientService.findPatientById(id);
+    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable Long id){
+        return patientService.findPatientById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'THERAPIST')")
-
-    public ResponseEntity<PatientResponseDTO> cretePatient(@RequestBody PatientRequestDTO patientRequestDTO){
+    @Operation(summary = "Create a new patient", description = "Creates a new patient record. Accessible by ADMIN or THERAPIST.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Patient created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid patient data"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<PatientResponseDTO> createPatient(@RequestBody PatientRequestDTO patientRequestDTO) {
         PatientResponseDTO response = patientService.createPatient(patientRequestDTO);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
