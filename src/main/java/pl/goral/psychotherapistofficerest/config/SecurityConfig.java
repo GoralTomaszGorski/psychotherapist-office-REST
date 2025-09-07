@@ -45,7 +45,6 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/api/swagger-ui.html",
                                 "/api/swagger-ui/**",
-                                "/api/**", // do usuniecia po implemntacji
                                 "/api/auth/**",
                                 "/api/index/**",
                                 "/h2-console/**",
