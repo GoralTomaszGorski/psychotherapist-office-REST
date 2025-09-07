@@ -34,6 +34,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        String path = request.getServletPath();
+        if (path.startsWith("/api/v1/docs") ||
+                path.startsWith("/swagger-ui") ||
+                path.equals("/api/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -46,6 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractUsername(jwt);
         } catch (Exception e) {
             logger.warn("Failed to extract username from JWT: {}", e.getMessage());
+            filterChain.doFilter(request, response); // <-- TU BYŁO return, powinno być doFilter!
             return;
         }
 
@@ -63,6 +72,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             } else {
                 logger.warn("JWT token is invalid for user: {}", userEmail);
                 filterChain.doFilter(request, response);
+                return; // <-- dodaj return, by nie leciało dalej!
             }
         }
 
