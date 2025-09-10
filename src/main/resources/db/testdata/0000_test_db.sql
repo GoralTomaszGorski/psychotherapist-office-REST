@@ -17,7 +17,7 @@ CREATE TABLE
 CREATE TABLE
     therapy (
         id BIGSERIAL PRIMARY KEY,
-        kind_of_therapy VARCHAR(255),
+        kind_of_therapy VARCHAR(1023),
         description TEXT,
         price DECIMAL(10, 2)
     );

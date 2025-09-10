@@ -1,19 +1,19 @@
-﻿
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92324, '', '3223612787', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92325, '', '3223612795', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92326, '', '3223612777', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92327, '', '3116346129', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92328, '', '1439719617', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92329, '', '179523798', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92330, '', '2732103328', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92331, '', '3585395621', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92332, '', '1476059145', 2, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92333, '', '1191634968', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92334, '', '2818082239', 2, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92335, '', '2892530456', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92336, '', '2552268135', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92337, '', '2552293927', 5, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92338, '', '3585395517', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92339, '', '3337295917', 1, 1, '2024-03-25');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92340, '', '148831578', 2, 1, '2024-03-26');
-INSERT INTO counter (id, session_id, ip, refresh, entry, date) VALUES (92341, '', '2450724892', 8, 1, '2024-03-26');
+﻿-- Dodano kolumnę url, bo w schemacie wygenerowanym przez Hibernate jest NOT NULL
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92324, '', '3223612787', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92325, '', '3223612795', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92326, '', '3223612777', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92327, '', '3116346129', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92328, '', '1439719617', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92329, '', '179523798', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92330, '', '2732103328', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92331, '', '3585395621', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92332, '', '1476059145', 2, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92333, '', '1191634968', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92334, '', '2818082239', 2, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92335, '', '2892530456', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92336, '', '2552268135', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92337, '', '2552293927', 5, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92338, '', '3585395517', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92339, '', '3337295917', 1, 1, '2024-03-25', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92340, '', '148831578', 2, 1, '2024-03-26', '/');
+INSERT INTO counter (id, session_id, ip, refresh, entry, date, url) VALUES (92341, '', '2450724892', 8, 1, '2024-03-26', '/');
