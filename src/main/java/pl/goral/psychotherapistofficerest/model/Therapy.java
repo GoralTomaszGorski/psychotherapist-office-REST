@@ -22,7 +22,7 @@ public class Therapy {
     private Long id;
     @Column(name = "KIND_OF_THERAPY")
     private String kindOfTherapy;
-
+    @Column(columnDefinition = "TEXT")
     private String description;
     private BigDecimal price;
 }
