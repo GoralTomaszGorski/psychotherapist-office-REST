@@ -10,14 +10,14 @@ public class PatientMapper {
 
     public Patient toEntity(PatientRequestDTO dto) {
         Patient patient = new Patient();
-        patient.setNick(dto.nick());
-        patient.setName(dto.name());
-        patient.setSurname(dto.surname());
-        patient.setEmail(dto.email());
-        patient.setTelephone(dto.telephone());
-        patient.setYearOfBrith(dto.yearOfBirth());
-        patient.setInformation(dto.information());
-        patient.setApproval(dto.approval());
+        patient.setNick(dto.getNick());
+        patient.setName(dto.getName());
+        patient.setSurname(dto.getSurname());
+        patient.setEmail(dto.getEmail());
+        patient.setTelephone(dto.getTelephone());
+        patient.setYearOfBrith(dto.getYearOfBirth());
+        patient.setInformation(dto.getInformation());
+        patient.setApproval(dto.isApproval());
         return patient;
     }
 

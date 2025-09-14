@@ -34,10 +34,12 @@ public class PatientService {
 
     public PatientResponseDTO createPatient(PatientRequestDTO request) {
         Patient patient = patientMapper.toEntity(request);
-        if (request.nick() == null || request.nick().isBlank()) {
-            patient.setNick(generateNick(patient.getName(), patient.getSurname(), request.telephone()));
+
+        if (request.getNick() == null || request.getNick().isBlank()) {
+            String generatedNick  = generateNick(request.getName(), request.getSurname(), request.getTelephone());
+            patient.setNick(generatedNick);
         } else {
-            patient.setNick(request.nick());
+            patient.setNick(request.getNick());
         }
         patient.setJoinDate(dateInWarsaw.getLocalDateInWarsaw());
         Patient savedPatient = patientRepository.save(patient);
