@@ -9,6 +9,7 @@ import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.repository.PatientRepository;
 import pl.goral.psychotherapistofficerest.utils.DateInWarsaw;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,22 @@ public class PatientService {
 
     public PatientResponseDTO createPatient(PatientRequestDTO request) {
         Patient patient = patientMapper.toEntity(request);
+        if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Invalid email");
+        }
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("Missing name");
+        }
+        if (request.getSurname() == null || request.getSurname().isBlank()) {
+            throw new IllegalArgumentException("Missing surname");
+        }
+        int currentYear = LocalDate.now().getYear();
+        if (currentYear - request.getYearOfBirth() > 90) {
+
+            throw new IllegalArgumentException("Patient is too old");
+        } else if (currentYear - request.getYearOfBirth() < 5) {
+            throw new IllegalArgumentException("Patient is too young");
+        }
 
         if (request.getNick() == null || request.getNick().isBlank()) {
             String generatedNick  = generateNick(request.getName(), request.getSurname(), request.getTelephone());

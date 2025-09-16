@@ -1,16 +1,25 @@
 package pl.goral.psychotherapistofficerest.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.ZonedDateTime;
 
-public record PatientResponseDTO(
-        Long id,
-        String nick,
-        String name,
-        String surname,
-        String email,
-        String telephone,
-        int yearOfBirth,
-        ZonedDateTime joinDate,
-        String information,
-        boolean approval
-) {}
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PatientResponseDTO {
+    private Long id;
+    private String nick;
+    private String name;
+    private String surname;
+    private String email;
+    private String telephone;
+    private int yearOfBirth;
+    private ZonedDateTime joinDate;
+    private String information;
+    private boolean approval;
+}
