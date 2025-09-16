@@ -27,7 +27,7 @@ class PatientServiceIntegrationTest {
     void shouldCreateAndFindPatient() {
         // given
         PatientRequestDTO request = new PatientRequestDTO(
-                "janek", "Jan","Kowalski" , "jan@kowalski.pl", "123456789", 2025, "some info", true
+                "janek", "Jan","Kowalski" , "jan@kowalski.pl", "123456789", 2000, "some info", true
         );
 
         // when
@@ -47,7 +47,7 @@ class PatientServiceIntegrationTest {
     @Test
     void shouldGenerateNickWhenBlank() {
         PatientRequestDTO request = new PatientRequestDTO(
-                "", "Ania", "Nowak", "Aan@et.pl", "4546546123", 2025, "some info", true
+                "", "Ania", "Nowak", "Aan@et.pl", "4546546123", 1990, "some info", true
         );
         PatientResponseDTO created = patientService.createPatient(request);
 
@@ -56,7 +56,6 @@ class PatientServiceIntegrationTest {
     }
 
     @Test
-    @Disabled
     void shouldReturnEmptyForNotExistingPatient() {
         Optional<PatientResponseDTO> notFound = patientService.findPatientById(99999L);
         assertThat(notFound).isEmpty();
@@ -81,7 +80,7 @@ class PatientServiceIntegrationTest {
         );
         assertThatThrownBy(() -> patientService.createPatient(request))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("age");
+                .hasMessageContaining("Patient is too old");
     }
 
     @Test
