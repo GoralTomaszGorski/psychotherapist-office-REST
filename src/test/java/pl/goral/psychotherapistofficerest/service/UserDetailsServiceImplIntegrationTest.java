@@ -1,7 +1,5 @@
 package pl.goral.psychotherapistofficerest.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -11,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pl.goral.psychotherapistofficerest.dto.UserDto;
 import pl.goral.psychotherapistofficerest.model.AppUser;
-import pl.goral.psychotherapistofficerest.model.UserRole;
 import pl.goral.psychotherapistofficerest.repository.UserRepository;
 
 import java.util.List;
