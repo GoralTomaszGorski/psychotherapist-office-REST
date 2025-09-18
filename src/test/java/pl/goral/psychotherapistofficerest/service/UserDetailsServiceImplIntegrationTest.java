@@ -30,7 +30,6 @@ class UserDetailsServiceImplIntegrationTest {
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
-        // Zakładam, że AppUser ma pola: id, email, password, itp.
         savedUser = AppUser.builder()
                 .email("test@example.com")
                 .password("password123")
