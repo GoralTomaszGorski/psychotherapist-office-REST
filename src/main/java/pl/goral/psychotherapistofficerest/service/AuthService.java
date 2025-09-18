@@ -55,10 +55,4 @@ public class AuthService {
         String token = jwtService.generateToken(user);
         return new AuthResponseDto(token, user.getEmail(), user.getId());
     }
-
-    public UserDto createUser(UserDto dto) {
-        AppUser user = UserMapper.toEntity(dto, passwordEncoder);
-        AppUser saved = userRepository.save(user);
-        return UserMapper.toDto(saved);
-    }
 }
