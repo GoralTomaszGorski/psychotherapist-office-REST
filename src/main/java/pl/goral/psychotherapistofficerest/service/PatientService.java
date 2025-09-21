@@ -71,4 +71,11 @@ public class PatientService {
         String namePart = name.isEmpty() ? "" : String.valueOf(name.charAt(0));
         return last3digits + namePart + surnamePart;
     }
+
+    public void deletePatientById(long id) {
+        if (!patientRepository.existsById(id)) {
+            throw new RuntimeException("Patient not found");
+        }
+        patientRepository.deleteById(id);
+    }
 }

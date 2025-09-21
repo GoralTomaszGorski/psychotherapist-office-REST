@@ -65,4 +65,18 @@ public class PatientController {
         PatientResponseDto response = patientService.createPatient(patientRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete patient by ID", description = "Deletes a patient by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Patient deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Patient not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+
+    public ResponseEntity<Void> deletePatientById(@PathVariable Long id) {
+        patientService.deletePatientById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
