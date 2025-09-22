@@ -27,12 +27,12 @@ public class SqlFilesLoaderRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<String> sqlFiles = Arrays.asList(
-                "db/testdata/0001_Patient.sql",
-                "db/testdata/0002_Therapy.sql",
-                "db/testdata/0003_Calender.sql",
-                "db/testdata/0004_Appointment.sql",
-                "db/testdata/0005_Users_and_roles.sql",
-                "db/testdata/0006_Counter.sql"
+//                "db/testdata/0001_Patient.sql",
+//                "db/testdata/0002_Therapy.sql",
+//                "db/testdata/0003_Calender.sql",
+//                "db/testdata/0004_Appointment.sql",
+//                "db/testdata/0005_Users_and_roles.sql",
+//                "db/testdata/0006_Counter.sql"
         );
 
         try (Connection conn = dataSource.getConnection()) {
