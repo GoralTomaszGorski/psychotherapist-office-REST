@@ -2,4 +2,4 @@
 
 API under construction currently I have the following endpoints
 
-<img width="1017" height="838" alt="image" src="https://github.com/user-attachments/assets/92d8623f-5f24-4c6c-8b42-1393adc0a7c8" />
+<img width="998" height="884" alt="image" src="https://github.com/user-attachments/assets/adaefab0-97fb-4c87-aa13-3f9652fd06f7" />
