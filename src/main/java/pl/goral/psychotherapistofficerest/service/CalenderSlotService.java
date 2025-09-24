@@ -7,6 +7,8 @@ import pl.goral.psychotherapistofficerest.mapper.CalenderSlotMapper;
 import pl.goral.psychotherapistofficerest.model.CalenderSlot;
 import pl.goral.psychotherapistofficerest.repository.CalenderSlotRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CalenderSlotService {
@@ -31,6 +33,33 @@ public class CalenderSlotService {
         return calenderSlotMapper.toDto(calenderSlot);
     }
 
+
+    public CalenderSlotDto getFreeSlotById(Long id) {
+        CalenderSlot calenderSlot = calenderSlotRepository.findCalenderSlotByIdAndFreeIsTrue(id)
+                .orElseThrow(() -> new RuntimeException("Slot not found"));
+        return calenderSlotMapper.toDto(calenderSlot);
+    }
+    public List<CalenderSlotDto> getAllSlots() {
+        return calenderSlotRepository.findAll()
+                .stream()
+                .map(calenderSlotMapper::toDto)
+                .toList();
+    }
+
+    public List<CalenderSlotDto> getFreeSlots() {
+        return calenderSlotRepository.findAllByFreeIsTrueOrderById()
+                .stream()
+                .map(calenderSlotMapper::toDto)
+                .toList();
+    }
+
+    public List<CalenderSlotDto> getBusySlots() {
+        return calenderSlotRepository.findAllByFreeIsFalseOrderById()
+                .stream()
+                .map(calenderSlotMapper::toDto)
+                .toList();
+    }
+
     public void deleteSlot(Long id) {
         if (!calenderSlotRepository.existsById(id)) {
             throw new RuntimeException("Slot not found");
@@ -42,4 +71,9 @@ public class CalenderSlotService {
         calenderSlotRepository.deleteAll();
     }
 
+    public CalenderSlotDto createCalenderSlot(CalenderSlotDto slotDto) {
+        CalenderSlot calenderSlot = calenderSlotMapper.toEntity(slotDto);
+        calenderSlotRepository.save(calenderSlot);
+        return calenderSlotMapper.toDto(calenderSlot);
+    }
 }
