@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.service.CalenderSlotService;
 
+import java.util.List;
+
 @Tag(name = "CalenderSlots", description = "Endpoints for managing calendar slots (day/time/availability)")
 @RestController
 @RequestMapping("/api/calender-slots")
@@ -17,6 +19,28 @@ import pl.goral.psychotherapistofficerest.service.CalenderSlotService;
 public class CalenderSlotController {
 
     private final CalenderSlotService calenderSlotService;
+
+    @PostMapping
+    @Operation(summary = "Create a new calendar slot", description = "Creates a new calendar slot with specified day, time, and availability")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Slot created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid data provided"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<CalenderSlotDto> createSlot(@RequestBody CalenderSlotDto slotDto) {
+        CalenderSlotDto created = calenderSlotService.createCalenderSlot(slotDto);
+        return ResponseEntity.status(201).body(created);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all slots", description = "Returns all calendar slots (free and busy)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Slots returned successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<CalenderSlotDto>> getAllSlots() {
+        return ResponseEntity.ok(calenderSlotService.getAllSlots());
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get slot by ID", description = "Returns a calendar slot by its ID")
@@ -29,8 +53,28 @@ public class CalenderSlotController {
         return ResponseEntity.ok(calenderSlotService.getSlot(id));
     }
 
+    @GetMapping("/free")
+    @Operation(summary = "Get free slots", description = "Returns all free calendar slots")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Free slots returned successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<CalenderSlotDto>> getFreeSlots() {
+        return ResponseEntity.ok(calenderSlotService.getFreeSlots());
+    }
+
+    @GetMapping("/busy")
+    @Operation(summary = "Get busy slots", description = "Returns all busy (not free) calendar slots")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busy slots returned successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<CalenderSlotDto>> getBusySlots() {
+        return ResponseEntity.ok(calenderSlotService.getBusySlots());
+    }
+
     @PutMapping("/{id}")
-    @Operation(summary = "Update slot day/time/availability", description = "Updates slot's day, time and availability by ID")
+    @Operation(summary = "Update slot", description = "Updates slot's day, time and availability by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Slot updated successfully"),
             @ApiResponse(responseCode = "404", description = "Slot not found"),
