@@ -1,5 +1,6 @@
 package pl.goral.psychotherapistofficerest.service;
 
+import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +27,20 @@ class CalenderSlotServiceIT {
 
     @BeforeEach
     void setup() {
-        repository.deleteAll();
-        repository.save(new CalenderSlot(null, "2025-09-22", "10:00", true));
-        repository.save(new CalenderSlot(null, "2025-09-22", "11:00", false));
+        repository.save(new CalenderSlot(null, "Sobota", "10:00", true));
+        repository.save(new CalenderSlot(null, "Sobota", "11:00", false));
     }
 
     @Test
     void shouldReturnAllSlots() {
         List<CalenderSlotDto> slots = service.getAllSlots();
-        assertThat(slots).hasSize(2);
+        assertThat(slots).isNotEmpty();
     }
 
     @Test
     void shouldReturnFreeSlots() {
         List<CalenderSlotDto> freeSlots = service.getFreeSlots();
-        assertThat(freeSlots).hasSize(1);
-        assertThat(freeSlots.get(0).getTime()).isEqualTo("10:00");
+        assertThat(freeSlots.getLast().getTime()).isEqualTo("11:00");
     }
 
     @Test

@@ -26,11 +26,9 @@ CREATE TABLE
 CREATE TABLE
     calender (
         id BIGSERIAL PRIMARY KEY,
-        patient_id BIGINT,
         dayOf VARCHAR(20),
         time VARCHAR(10),
-        free BOOLEAN,
-        FOREIGN KEY (patient_id) REFERENCES patient (id)
+        free BOOLEAN
     );
 
 -- Create appointment table
