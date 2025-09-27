@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({CalenderSlotService.class, CalenderSlotMapper.class})
-class CalenderSlotServiceIT {
+class CalenderSlotServiceIntegrationTest {
 
     @Autowired
     private CalenderSlotService service;
@@ -25,8 +25,10 @@ class CalenderSlotServiceIT {
     @Autowired
     private CalenderSlotRepository repository;
 
+
     @BeforeEach
     void setup() {
+        repository.deleteAll();
         repository.save(new CalenderSlot(null, "Sobota", "10:00", true));
         repository.save(new CalenderSlot(null, "Sobota", "11:00", false));
     }
@@ -40,7 +42,7 @@ class CalenderSlotServiceIT {
     @Test
     void shouldReturnFreeSlots() {
         List<CalenderSlotDto> freeSlots = service.getFreeSlots();
-        assertThat(freeSlots.getLast().getTime()).isEqualTo("11:00");
+        assertThat(freeSlots.getLast().getTime()).isEqualTo("10:00");
     }
 
     @Test
