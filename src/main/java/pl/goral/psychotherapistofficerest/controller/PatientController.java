@@ -4,21 +4,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
 import pl.goral.psychotherapistofficerest.mapper.PatientMapper;
-import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.service.PatientService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +34,7 @@ public class PatientController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public List<PatientResponseDTO> getPatients(){
+    public List<PatientResponseDto> getPatients(){
         return patientService.findAllPatients();
     }
 
@@ -50,7 +46,7 @@ public class PatientController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
 
-    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable Long id){
+    public ResponseEntity<PatientResponseDto> getPatientById(@PathVariable Long id){
         return patientService.findPatientById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -65,8 +61,22 @@ public class PatientController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<PatientResponseDTO> createPatient(@RequestBody PatientRequestDTO patientRequestDTO) {
-        PatientResponseDTO response = patientService.createPatient(patientRequestDTO);
+    public ResponseEntity<PatientResponseDto> createPatient(@RequestBody PatientRequestDto patientRequestDto) {
+        PatientResponseDto response = patientService.createPatient(patientRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete patient by ID", description = "Deletes a patient by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Patient deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Patient not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+
+    public ResponseEntity<Void> deletePatientById(@PathVariable Long id) {
+        patientService.deletePatientById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

@@ -3,8 +3,8 @@ package pl.goral.psychotherapistofficerest.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.PatientMapper;
 import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.repository.PatientRepository;
@@ -37,25 +37,25 @@ class PatientServiceUnitTest {
     void shouldReturnAllPatientsAsDTO() {
         // given
         Patient patient = new Patient();
-        PatientResponseDTO dto = mock(PatientResponseDTO.class);
+        PatientResponseDto dto = mock(PatientResponseDto.class);
 
         when(patientRepository.findAll()).thenReturn(List.of(patient));
-        when(patientMapper.toResponseDTO(patient)).thenReturn(dto);
+        when(patientMapper.toResponseDto(patient)).thenReturn(dto);
 
         // when
-        List<PatientResponseDTO> result = patientService.findAllPatients();
+        List<PatientResponseDto> result = patientService.findAllPatients();
 
         // then
         assertThat(result).containsExactly(dto);
         verify(patientRepository).findAll();
-        verify(patientMapper).toResponseDTO(patient);
+        verify(patientMapper).toResponseDto(patient);
     }
 
     @Test
     void shouldReturnEmptyListWhenNoPatients() {
         when(patientRepository.findAll()).thenReturn(List.of());
 
-        List<PatientResponseDTO> result = patientService.findAllPatients();
+        List<PatientResponseDto> result = patientService.findAllPatients();
 
         assertThat(result).isEmpty();
         verify(patientRepository).findAll();
@@ -65,30 +65,30 @@ class PatientServiceUnitTest {
     @Test
     void shouldReturnPatientById() {
         Patient patient = new Patient();
-        PatientResponseDTO dto = mock(PatientResponseDTO.class);
+        PatientResponseDto dto = mock(PatientResponseDto.class);
 
         when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
-        when(patientMapper.toResponseDTO(patient)).thenReturn(dto);
+        when(patientMapper.toResponseDto(patient)).thenReturn(dto);
 
-        Optional<PatientResponseDTO> result = patientService.findPatientById(1L);
+        Optional<PatientResponseDto> result = patientService.findPatientById(1L);
 
         assertThat(result).hasValue(dto);
         verify(patientRepository).findById(1L);
-        verify(patientMapper).toResponseDTO(patient);
+        verify(patientMapper).toResponseDto(patient);
     }
 
     @Test
     void shouldReturnEmptyWhenPatientNotFound() {
         when(patientRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<PatientResponseDTO> result = patientService.findPatientById(1L);
+        Optional<PatientResponseDto> result = patientService.findPatientById(1L);
 
         assertThat(result).isEmpty();
         verify(patientRepository).findById(1L);
         verifyNoInteractions(patientMapper);
     }
 
-    PatientRequestDTO request = PatientRequestDTO.builder()
+    PatientRequestDto request = PatientRequestDto.builder()
             .nick(null)  // or "janek" for the second test
             .name("Jan")
             .surname("Kowalski")
@@ -103,7 +103,7 @@ class PatientServiceUnitTest {
     @Test
     void shouldCreatePatientAndGenerateNickIfBlank() {
         // given
-        PatientRequestDTO request = mock(PatientRequestDTO.class);
+        PatientRequestDto request = mock(PatientRequestDto.class);
         when(request.getNick()).thenReturn(null);
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
@@ -117,11 +117,11 @@ class PatientServiceUnitTest {
         Patient savedPatient = new Patient();
         when(patientRepository.save(patient)).thenReturn(savedPatient);
 
-        PatientResponseDTO dto = mock(PatientResponseDTO.class);
-        when(patientMapper.toResponseDTO(savedPatient)).thenReturn(dto);
+        PatientResponseDto dto = mock(PatientResponseDto.class);
+        when(patientMapper.toResponseDto(savedPatient)).thenReturn(dto);
 
         // when
-        PatientResponseDTO result = patientService.createPatient(request);
+        PatientResponseDto result = patientService.createPatient(request);
 
         // then
         assertThat(patient.getNick()).isEqualTo("789JKo");
@@ -129,13 +129,13 @@ class PatientServiceUnitTest {
 
         verify(patientRepository).save(patient);
         verify(patientMapper).toEntity(request);
-        verify(patientMapper).toResponseDTO(savedPatient);
+        verify(patientMapper).toResponseDto(savedPatient);
         verify(dateInWarsaw).getLocalDateInWarsaw();
     }
 
     @Test
     void shouldCreatePatientWithProvidedNick() {
-        PatientRequestDTO request = mock(PatientRequestDTO.class);
+        PatientRequestDto request = mock(PatientRequestDto.class);
         when(request.getNick()).thenReturn("janek");
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
@@ -148,10 +148,10 @@ class PatientServiceUnitTest {
         savedPatient.setNick("janek");
         when(patientRepository.save(patient)).thenReturn(savedPatient);
 
-        PatientResponseDTO dto = mock(PatientResponseDTO.class);
-        when(patientMapper.toResponseDTO(savedPatient)).thenReturn(dto);
+        PatientResponseDto dto = mock(PatientResponseDto.class);
+        when(patientMapper.toResponseDto(savedPatient)).thenReturn(dto);
 
-        PatientResponseDTO result = patientService.createPatient(request);
+        PatientResponseDto result = patientService.createPatient(request);
 
         assertThat(patient.getNick()).isEqualTo("janek");
         assertThat(result).isEqualTo(dto);

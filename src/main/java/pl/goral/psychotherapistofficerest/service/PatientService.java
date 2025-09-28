@@ -2,8 +2,8 @@ package pl.goral.psychotherapistofficerest.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.PatientMapper;
 import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.repository.PatientRepository;
@@ -21,19 +21,19 @@ public class PatientService {
     private final DateInWarsaw dateInWarsaw;
     private final PatientMapper patientMapper;
 
-    public List<PatientResponseDTO> findAllPatients() {
+    public List<PatientResponseDto> findAllPatients() {
         return patientRepository.findAll()
                 .stream()
-                .map(patientMapper::toResponseDTO)
+                .map(patientMapper::toResponseDto)
                 .toList();
     }
 
-    public Optional<PatientResponseDTO> findPatientById(long id) {
+    public Optional<PatientResponseDto> findPatientById(long id) {
                 return patientRepository.findById(id)
-                        .map(patientMapper::toResponseDTO);
+                        .map(patientMapper::toResponseDto);
     }
 
-    public PatientResponseDTO createPatient(PatientRequestDTO request) {
+    public PatientResponseDto createPatient(PatientRequestDto request) {
         Patient patient = patientMapper.toEntity(request);
         if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new IllegalArgumentException("Invalid email");
@@ -60,7 +60,7 @@ public class PatientService {
         }
         patient.setJoinDate(dateInWarsaw.getLocalDateInWarsaw());
         Patient savedPatient = patientRepository.save(patient);
-        return patientMapper.toResponseDTO(savedPatient);
+        return patientMapper.toResponseDto(savedPatient);
     }
 
     private String generateNick(String name, String surname, String telephone) {
@@ -70,5 +70,12 @@ public class PatientService {
         String surnamePart = surname.length() >= 2 ? surname.substring(0, 2) : surname;
         String namePart = name.isEmpty() ? "" : String.valueOf(name.charAt(0));
         return last3digits + namePart + surnamePart;
+    }
+
+    public void deletePatientById(long id) {
+        if (!patientRepository.existsById(id)) {
+            throw new RuntimeException("Patient not found");
+        }
+        patientRepository.deleteById(id);
     }
 }

@@ -26,7 +26,7 @@ import java.util.Set;
         private Therapy therapy;
         @OneToOne
         @JoinColumn(name = "calender_id", referencedColumnName = "id")
-        private Calender calender;
+        private CalenderSlot calenderSlot;
 
     @Entity
     @Table(name = "users")

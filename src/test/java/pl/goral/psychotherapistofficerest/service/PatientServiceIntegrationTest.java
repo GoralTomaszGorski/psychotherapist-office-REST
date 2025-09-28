@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,28 +24,28 @@ class PatientServiceIntegrationTest {
     @Test
     void shouldCreateAndFindPatient() {
         // given
-        PatientRequestDTO request = new PatientRequestDTO(
+        PatientRequestDto request = new PatientRequestDto(
                 "janek", "Jan","Kowalski" , "jan@kowalski.pl", "123456789", 2000, "some info", true
         );
 
         // when
-        PatientResponseDTO created = patientService.createPatient(request);
+        PatientResponseDto created = patientService.createPatient(request);
 
         // then
         assertThat(created.getName()).isEqualTo("Jan");
         assertThat(created.getNick()).isEqualTo("janek");
         assertThat(created.getEmail()).isEqualTo("jan@kowalski.pl");
 
-        List<PatientResponseDTO> all = patientService.findAllPatients();
-        assertThat(all).extracting(PatientResponseDTO::getId).contains(created.getId());
+        List<PatientResponseDto> all = patientService.findAllPatients();
+        assertThat(all).extracting(PatientResponseDto::getId).contains(created.getId());
     }
 
     @Test
     void shouldGenerateNickWhenBlank() {
-        PatientRequestDTO request = new PatientRequestDTO(
+        PatientRequestDto request = new PatientRequestDto(
                 "", "Ania", "Nowak", "Aan@et.pl", "4546546123", 1990, "some info", true
         );
-        PatientResponseDTO created = patientService.createPatient(request);
+        PatientResponseDto created = patientService.createPatient(request);
 
         // Nick powinien być wygenerowany: ostatnie 3 cyfry + pierwsza litera imienia + 2 pierwsze litery nazwiska
         assertThat(created.getNick()).isEqualTo("123ANo");
@@ -53,14 +53,14 @@ class PatientServiceIntegrationTest {
 
     @Test
     void shouldReturnEmptyForNotExistingPatient() {
-        Optional<PatientResponseDTO> notFound = patientService.findPatientById(99999L);
+        Optional<PatientResponseDto> notFound = patientService.findPatientById(99999L);
         assertThat(notFound).isEmpty();
     }
 
 
     @Test
     void shouldNotAllowInvalidEmail() {
-        PatientRequestDTO request = new PatientRequestDTO(
+        PatientRequestDto request = new PatientRequestDto(
                 "nick", "Tom", "Smith", "not-an-email", "123456789", 1990, "info", true
         );
         assertThatThrownBy(() -> patientService.createPatient(request))
@@ -71,7 +71,7 @@ class PatientServiceIntegrationTest {
     @Test
     void shouldNotAllowPatientOlderThan90Years() {
         int yearOfBirth = LocalDate.now().getYear() - 91;
-        PatientRequestDTO request = new PatientRequestDTO(
+        PatientRequestDto request = new PatientRequestDto(
                 "nick", "Tom", "Smith", "tom@smith.com", "123456789", yearOfBirth, "info", true
         );
         assertThatThrownBy(() -> patientService.createPatient(request))
@@ -82,7 +82,7 @@ class PatientServiceIntegrationTest {
     @Test
     void shouldNotAllowMissingNameOrSurname() {
         // Missing name
-        PatientRequestDTO request1 = new PatientRequestDTO(
+        PatientRequestDto request1 = new PatientRequestDto(
                 "nick", "", "Smith", "tom@smith.com", "123456789", 1990, "info", true
         );
         assertThatThrownBy(() -> patientService.createPatient(request1))
@@ -90,7 +90,7 @@ class PatientServiceIntegrationTest {
                 .hasMessageContaining("name");
 
         // Missing surname
-        PatientRequestDTO request2 = new PatientRequestDTO(
+        PatientRequestDto request2 = new PatientRequestDto(
                 "nick", "Tom", "", "tom@smith.com", "123456789", 1990, "info", true
         );
         assertThatThrownBy(() -> patientService.createPatient(request2))

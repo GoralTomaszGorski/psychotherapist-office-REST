@@ -1,14 +1,14 @@
 package pl.goral.psychotherapistofficerest.mapper;
 
 import org.springframework.stereotype.Component;
-import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDTO;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDTO;
+import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.model.Patient;
 
 @Component
 public class PatientMapper {
 
-    public Patient toEntity(PatientRequestDTO dto) {
+    public Patient toEntity(PatientRequestDto dto) {
         Patient patient = new Patient();
         patient.setNick(dto.getNick());
         patient.setName(dto.getName());
@@ -21,8 +21,8 @@ public class PatientMapper {
         return patient;
     }
 
-    public PatientResponseDTO toResponseDTO(Patient patient) {
-        return new PatientResponseDTO(
+    public PatientResponseDto toResponseDto(Patient patient) {
+        return new PatientResponseDto(
                 patient.getId(),
                 patient.getNick(),
                 patient.getName(),

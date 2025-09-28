@@ -11,7 +11,7 @@ import pl.goral.psychotherapistofficerest.utils.NotTooYoung;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientRequestDTO{
+public class PatientRequestDto{
     @Size(max = 50, message = "Nick must be less than 50 characters")
     String nick;
 
