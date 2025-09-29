@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
+import pl.goral.psychotherapistofficerest.model.SlotStatus;
 import pl.goral.psychotherapistofficerest.service.CalenderSlotService;
 
 import java.util.List;
@@ -49,8 +50,9 @@ public class CalenderSlotController {
             @ApiResponse(responseCode = "404", description = "Slot not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+
     public ResponseEntity<CalenderSlotDto> getSlotById(@PathVariable Long id) {
-        return ResponseEntity.ok(calenderSlotService.getSlot(id));
+        return ResponseEntity.ok(calenderSlotService.getSlotById(id));
     }
 
     @GetMapping("/free")
@@ -63,14 +65,16 @@ public class CalenderSlotController {
         return ResponseEntity.ok(calenderSlotService.getFreeSlots());
     }
 
-    @GetMapping("/busy")
-    @Operation(summary = "Get busy slots", description = "Returns all busy (not free) calendar slots")
+    @GetMapping("/status/{status}")
+    @Operation(summary = "Get slots by status", description = "Returns all calendar slots filtered by status")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busy slots returned successfully"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<CalenderSlotDto>> getBusySlots() {
-        return ResponseEntity.ok(calenderSlotService.getBusySlots());
+    public ResponseEntity<List<CalenderSlotDto>> getSlotsByStatus(@PathVariable String status) {
+        SlotStatus slotStatus = SlotStatus.valueOf(status.toUpperCase());
+        return ResponseEntity.ok(calenderSlotService.getSlotsByStatus(slotStatus));
+
     }
 
     @PutMapping("/{id}")
@@ -85,7 +89,7 @@ public class CalenderSlotController {
             @PathVariable Long id,
             @RequestBody CalenderSlotDto slotDto
     ) {
-        CalenderSlotDto updated = calenderSlotService.setSlot(id, slotDto.getDayOf(), slotDto.getTime(), slotDto.isFree());
+        CalenderSlotDto updated = calenderSlotService.updateSlot(id, slotDto);
         return ResponseEntity.ok(updated);
     }
 
