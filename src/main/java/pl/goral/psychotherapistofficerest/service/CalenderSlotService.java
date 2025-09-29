@@ -5,9 +5,17 @@ import org.springframework.stereotype.Service;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.mapper.CalenderSlotMapper;
 import pl.goral.psychotherapistofficerest.model.CalenderSlot;
+import pl.goral.psychotherapistofficerest.model.SlotRecurrence;
+import pl.goral.psychotherapistofficerest.model.SlotStatus;
 import pl.goral.psychotherapistofficerest.repository.CalenderSlotRepository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,29 +24,34 @@ public class CalenderSlotService {
     private final CalenderSlotRepository calenderSlotRepository;
     private final CalenderSlotMapper calenderSlotMapper;
 
-    public CalenderSlotDto setSlot(Long id, String dayOf, String time, boolean free) {
-        CalenderSlot calenderSlot = calenderSlotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Slot not found"));
+    public CalenderSlotDto getSlotById(Long id) {
+        CalenderSlot slot = calenderSlotRepository.findCalenderSlotById(id)
 
-        calenderSlot.setDayof(dayOf);
-        calenderSlot.setTime(time);
-        calenderSlot.setFree(free);
+                .orElseThrow(() -> new RuntimeException("Calender slot not found id:" + id));
+        return calenderSlotMapper.toDto(slot);
+    }
+
+    public CalenderSlotDto setSlot(CalenderSlotDto slotDto) {
+        CalenderSlot calenderSlot = calenderSlotMapper.toEntity(slotDto);
+        calenderSlot.setStatus(SlotStatus.FREE);
         calenderSlotRepository.save(calenderSlot);
         return calenderSlotMapper.toDto(calenderSlot);
     }
 
-    public CalenderSlotDto getSlot(Long id) {
-        CalenderSlot calenderSlot = calenderSlotRepository.findById(id)
+    public CalenderSlotDto setSlotStatus(Long id, SlotStatus status) {
+        CalenderSlot slot = calenderSlotRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
-        return calenderSlotMapper.toDto(calenderSlot);
+        slot.setStatus(status);
+        return calenderSlotMapper.toDto(calenderSlotRepository.save(slot));
     }
 
-
-    public CalenderSlotDto getFreeSlotById(Long id) {
-        CalenderSlot calenderSlot = calenderSlotRepository.findCalenderSlotByIdAndFreeIsTrue(id)
-                .orElseThrow(() -> new RuntimeException("Slot not found"));
-        return calenderSlotMapper.toDto(calenderSlot);
+    public List<CalenderSlotDto> getSlotsByStatus(SlotStatus status) {
+        return calenderSlotRepository.findAllByStatusOrderByDateAscTimeAsc(status)
+                .stream()
+                .map(calenderSlotMapper::toDto)
+                .collect(Collectors.toList());
     }
+
     public List<CalenderSlotDto> getAllSlots() {
         return calenderSlotRepository.findAll()
                 .stream()
@@ -47,17 +60,40 @@ public class CalenderSlotService {
     }
 
     public List<CalenderSlotDto> getFreeSlots() {
-        return calenderSlotRepository.findAllByFreeIsTrueOrderById()
+        return calenderSlotRepository.findAllByStatusOrderByDateAscTimeAsc(SlotStatus.FREE)
                 .stream()
                 .map(calenderSlotMapper::toDto)
                 .toList();
     }
 
-    public List<CalenderSlotDto> getBusySlots() {
-        return calenderSlotRepository.findAllByFreeIsFalseOrderById()
-                .stream()
-                .map(calenderSlotMapper::toDto)
-                .toList();
+    public List<CalenderSlotDto> createRecurringSlots(CalenderSlotDto template, int count) {
+        List<CalenderSlotDto> slots = new ArrayList<>();
+        LocalDate startDate = template.getDate();
+        LocalTime time = template.getTime();
+        String dayOfWeek = template.getDayOfWeek();
+        SlotRecurrence recurrence = SlotRecurrence.valueOf(template.getRecurrence());
+
+        for (int i = 0; i < count; i++) {
+            LocalDate slotDate;
+            switch (recurrence) {
+                case ONCE -> slotDate = startDate;
+                case WEEKLY -> slotDate = startDate.plusWeeks(i);
+                case MONTHLY -> slotDate = startDate.plusMonths(i);
+                default -> throw new IllegalArgumentException("Unknown recurrence: " + recurrence);
+            }
+            CalenderSlotDto slot = CalenderSlotDto.builder()
+                    .dayOfWeek(slotDate.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pl")))
+                    .date(slotDate)
+                    .time(time)
+                    .recurrence(recurrence.name())
+                    .status("FREE")
+                    .build();
+            CalenderSlot entity = calenderSlotMapper.toEntity(slot);
+            calenderSlotRepository.save(entity);
+            slots.add(calenderSlotMapper.toDto(entity));
+            if (recurrence == SlotRecurrence.ONCE) break; // tylko jeden slot
+        }
+        return slots;
     }
 
     public void deleteSlot(Long id) {
@@ -76,4 +112,19 @@ public class CalenderSlotService {
         calenderSlotRepository.save(calenderSlot);
         return calenderSlotMapper.toDto(calenderSlot);
     }
+
+    public CalenderSlotDto updateSlot(Long id, CalenderSlotDto slotDto) {
+        CalenderSlot slot = calenderSlotRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        slot.setDayOfWeek(slotDto.getDayOfWeek());
+        slot.setDate(slotDto.getDate());
+        slot.setTime(slotDto.getTime());
+        slot.setStatus(SlotStatus.valueOf(slotDto.getStatus()));
+        slot.setRecurrence(SlotRecurrence.valueOf(slotDto.getRecurrence()));
+
+        CalenderSlot saved = calenderSlotRepository.save(slot);
+        return calenderSlotMapper.toDto(saved);
+    }
+
 }
