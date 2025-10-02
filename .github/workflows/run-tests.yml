@@ -3,11 +3,11 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "development" ]
-  pull:
+  pull_request:
     branches: [ "development" ]
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
