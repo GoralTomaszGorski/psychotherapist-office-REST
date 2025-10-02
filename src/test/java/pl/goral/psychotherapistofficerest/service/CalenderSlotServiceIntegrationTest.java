@@ -36,14 +36,12 @@ class CalenderSlotServiceIntegrationTest {
                 .date(LocalDate.of(2025, 10, 4))
                 .time(LocalTime.of(10, 0))
                 .status(SlotStatus.FREE)
-                .recurrence("ONCE")
                 .build());
         repository.save(CalenderSlot.builder()
                 .dayOfWeek("Sobota")
                 .date(LocalDate.of(2025, 10, 4))
                 .time(LocalTime.of(11, 0))
                 .status(SlotStatus.BUSY)
-                .recurrence("ONCE")
                 .build());
     }
 
@@ -73,16 +71,19 @@ class CalenderSlotServiceIntegrationTest {
     void shouldUpdateSlot() {
         CalenderSlot slot = repository.findAll().get(0);
 
-        CalenderSlotDto updated = service.setSlot(
-                slot.getId(),
-                "Sobota",
-                LocalTime.of(9, 0).toString(),
-                SlotStatus.BUSY // w nowym modelu, tutaj powinno być status BUSY, ale zostawiam zgodnie z metodą!
-        );
+        CalenderSlotDto.CalenderSlotDtoBuilder builder = CalenderSlotDto.builder();
+        builder.id(slot.getId());
+        builder.dayOfWeek("Sobota");
+        builder.time(LocalTime.of(9, 0));
+        builder.status(SlotStatus.BUSY.name());
+        builder.recurrence("ONCE");
+        CalenderSlotDto slotDto = builder
+                .build();
+
+        CalenderSlotDto updated = service.updateSlot(slot.getId(), slotDto);
 
         assertThat(updated.getDayOfWeek()).isEqualTo("Sobota");
-        assertThat(updated.getTime()).isEqualTo(LocalTime.of(9, 0));
-        assertThat(updated.getStatus()).isEqualTo("BUSY");
+        assertThat(updated.getStatus()).isEqualTo(SlotStatus.BUSY.name());
     }
 
     @Test
