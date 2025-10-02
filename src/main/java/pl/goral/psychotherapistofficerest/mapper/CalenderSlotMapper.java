@@ -3,6 +3,8 @@ package pl.goral.psychotherapistofficerest.mapper;
 import org.springframework.stereotype.Component;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.model.CalenderSlot;
+import pl.goral.psychotherapistofficerest.model.SlotRecurrence;
+import pl.goral.psychotherapistofficerest.model.SlotStatus;
 
 @Component
 public class CalenderSlotMapper {
@@ -10,18 +12,31 @@ public class CalenderSlotMapper {
         if (entity == null) return null;
         return CalenderSlotDto.builder()
                 .id(entity.getId())
-                .dayOf(entity.getDayof())
+                .dayOfWeek(entity.getDayOfWeek())
                 .time(entity.getTime())
-                .free(entity.isFree())
+                .date(entity.getDate())
+                .status(entity.getStatus() != null ? entity.getStatus().name() : null)
+                .recurrence(entity.getRecurrence() != null ? entity.getRecurrence().name() : null)
                 .build();
     }
 
     public CalenderSlot toEntity(CalenderSlotDto dto) {
         if (dto == null) return null;
-        CalenderSlot calenderSlot = new CalenderSlot();
-        calenderSlot.setDayof(dto.getDayOf());
-        calenderSlot.setTime(dto.getTime());
-        calenderSlot.setFree(dto.isFree());
-        return calenderSlot;
+        return CalenderSlot.builder()
+                .id(dto.getId())
+                .dayOfWeek(dto.getDayOfWeek())
+                .date(dto.getDate())
+                .time(dto.getTime())
+                .status(
+                        dto.getStatus() == null
+                                ? SlotStatus.FREE
+                                : SlotStatus.valueOf(dto.getStatus())
+                )
+                .recurrence(
+                        dto.getRecurrence() == null
+                                ? SlotRecurrence.ONCE
+                                : SlotRecurrence.valueOf(dto.getRecurrence())
+                )
+                .build();
     }
 }

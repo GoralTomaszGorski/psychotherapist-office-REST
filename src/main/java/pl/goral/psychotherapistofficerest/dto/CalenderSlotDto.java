@@ -1,9 +1,10 @@
 package pl.goral.psychotherapistofficerest.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import pl.goral.psychotherapistofficerest.model.SlotStatus;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -11,7 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CalenderSlotDto {
     private Long id;
-    private String dayOf;     // "2025-09-29"
-    private String time;      // "14:00"
-    private boolean free; // czy termin zajęty
+    private String dayOfWeek;
+    private LocalDate date;
+    private LocalTime time;
+    private String status;      // "FREE", "BUSY", "CANCELLED", "ARCHIVED"
+    private String recurrence;  // "ONCE", "WEEKLY", "MONTHLY"
+
+
 }

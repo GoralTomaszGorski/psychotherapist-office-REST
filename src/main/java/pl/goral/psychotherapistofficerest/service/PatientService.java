@@ -29,8 +29,8 @@ public class PatientService {
     }
 
     public Optional<PatientResponseDto> findPatientById(long id) {
-                return patientRepository.findById(id)
-                        .map(patientMapper::toResponseDto);
+        return patientRepository.findById(id)
+                .map(patientMapper::toResponseDto);
     }
 
     public PatientResponseDto createPatient(PatientRequestDto request) {

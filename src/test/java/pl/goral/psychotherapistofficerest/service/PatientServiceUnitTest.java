@@ -107,6 +107,8 @@ class PatientServiceUnitTest {
         when(request.getNick()).thenReturn(null);
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
+        when(request.getEmail()).thenReturn("ecample@email.com");
+        when(request.getYearOfBirth()).thenReturn(1988);
         when(request.getTelephone()).thenReturn("123456789");
 
         Patient patient = new Patient();
@@ -139,6 +141,8 @@ class PatientServiceUnitTest {
         when(request.getNick()).thenReturn("janek");
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
+        when(request.getEmail()).thenReturn("ecample@email.com");
+        when(request.getYearOfBirth()).thenReturn(1988);
         when(request.getTelephone()).thenReturn("123456789");
 
         Patient patient = new Patient();
