@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.service.CalenderSlotService;
 
+
 import java.util.List;
 
 @Tag(name = "CalenderSlots", description = "Endpoints for managing calendar slots (day/time/availability)")
