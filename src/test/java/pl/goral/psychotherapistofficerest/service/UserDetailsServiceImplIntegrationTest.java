@@ -16,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 class UserDetailsServiceImplIntegrationTest {
 
     @Autowired
