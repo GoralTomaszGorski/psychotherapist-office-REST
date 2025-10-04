@@ -15,6 +15,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +25,20 @@ public class CalenderSlotService {
     private final CalenderSlotRepository calenderSlotRepository;
     private final CalenderSlotMapper calenderSlotMapper;
 
-    public CalenderSlotDto getSlotById(Long id) {
-        CalenderSlot slot = calenderSlotRepository.findCalenderSlotById(id)
+    public CalenderSlotDto findSlotById(Long id) {
+        CalenderSlot slot = calenderSlotRepository.findCalenderSlotByIdById(id)
 
                 .orElseThrow(() -> new RuntimeException("Calender slot not found id:" + id));
         return calenderSlotMapper.toDto(slot);
+    }
+
+    public CalenderSlot getSlotById(Long id){
+        Optional<CalenderSlot> slot = calenderSlotRepository.findById(id);
+        if (slot.isEmpty()) {
+            throw new RuntimeException("CalendarSlot not found");
+        }
+        return slot.get();
+
     }
 
     public CalenderSlotDto setSlot(CalenderSlotDto slotDto) {

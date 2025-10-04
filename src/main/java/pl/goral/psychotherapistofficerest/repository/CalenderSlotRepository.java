@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface CalenderSlotRepository extends JpaRepository<CalenderSlot, Long> {
 
-    Optional<CalenderSlot> findCalenderSlotById(Long id);
-
     // Pobiera wszystkie sloty dla konkretnej daty
     List<CalenderSlot> findAllByDateOrderByTimeAsc(java.time.LocalDate date);
 
@@ -18,5 +16,7 @@ public interface CalenderSlotRepository extends JpaRepository<CalenderSlot, Long
 
     List<CalenderSlot> findAllByStatusOrderByDateAscTimeAsc(SlotStatus status);
 
-    Long id(Long id);
+    Optional<CalenderSlot> findCalenderSlotByIdById(Long id);
+
+    Optional<CalenderSlot> getCalenderSlotsById(Long id);
 }

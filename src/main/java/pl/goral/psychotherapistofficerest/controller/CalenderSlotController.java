@@ -53,7 +53,7 @@ public class CalenderSlotController {
     })
 
     public ResponseEntity<CalenderSlotDto> getSlotById(@PathVariable Long id) {
-        return ResponseEntity.ok(calenderSlotService.getSlotById(id));
+        return ResponseEntity.ok(calenderSlotService.findSlotById(id));
     }
 
     @GetMapping("/free")
