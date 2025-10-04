@@ -53,7 +53,7 @@ class PatientServiceIntegrationTest {
 
     @Test
     void shouldReturnEmptyForNotExistingPatient() {
-        Optional<PatientResponseDto> notFound = patientService.findPatientById(99999L);
+        Optional<PatientResponseDto> notFound = Optional.ofNullable(patientService.findPatientById(99999L));
         assertThat(notFound).isEmpty();
     }
 
