@@ -43,7 +43,7 @@ public class TherapyService {
         return therapyMapper.toDto(therapy);
     }
 
-    public TherapyDto getTherapyById(Long id) {
+    public TherapyDto findTherapyById(Long id) {
         Therapy therapy = therapyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Therapy not found"));
                 return therapyMapper.toDto(therapy);
@@ -54,5 +54,10 @@ public class TherapyService {
             throw new RuntimeException("Therapy not found");
         }
         therapyRepository.deleteById(id);
+    }
+
+    public Therapy getTherapyById(Long id){
+        return therapyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Therapy not found"));
     }
 }
