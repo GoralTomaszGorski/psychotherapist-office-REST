@@ -17,9 +17,9 @@ public class AppointmentDtoMapper {
 
     public Appointment toEntity(
             AppointmentRequestDto dto,
-            PatientResponseDto patient,
-            TherapyDto therapy,
-            CalenderSlotDto calenderSlot
+            Patient patient,
+            Therapy therapy,
+            CalenderSlot calenderSlot
     ) {
         if (dto == null) return null;
         return Appointment.builder()

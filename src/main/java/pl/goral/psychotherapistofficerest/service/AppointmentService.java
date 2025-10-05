@@ -25,14 +25,14 @@ public class AppointmentService {
     private final AppointmentDtoMapper appointmentDtoMapper;
 
     @Transactional
-    public AppointmentResponseDto createAppointment(AppointmentRequestDto dto) {
-        Patient patient = patientService.getPatientById(dto.getPatientId());
-        Therapy therapy = therapyService.getTherapyById(dto.getTherapyId());
-        CalenderSlot calenderSlot = calenderSlotService.getSlotById(dto.getCalenderSlotId());
-
-        Appointment appointment = appointmentDtoMapper.toEntity(dto.getPatientId());
-        appointmentRepository.save(appointment);
-        return AppointmentDtoMapper.toDto(appointment);
+    public Appointment createAppointment(Patient patient, Therapy therapy, CalenderSlot calenderSlot, String status) {
+        Appointment appointment = Appointment.builder()
+                .patient(patient)
+                .therapy(therapy)
+                .calenderSlot(calenderSlot)
+                .status(status)
+                .build();
+        return appointmentRepository.save(appointment);
     }
 
 
