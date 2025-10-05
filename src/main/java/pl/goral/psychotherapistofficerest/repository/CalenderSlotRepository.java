@@ -16,7 +16,7 @@ public interface CalenderSlotRepository extends JpaRepository<CalenderSlot, Long
 
     List<CalenderSlot> findAllByStatusOrderByDateAscTimeAsc(SlotStatus status);
 
-    Optional<CalenderSlot> findCalenderSlotByIdById(Long id);
+    Optional<CalenderSlot> findCalenderSlotById(Long id);
 
     Optional<CalenderSlot> getCalenderSlotsById(Long id);
 }

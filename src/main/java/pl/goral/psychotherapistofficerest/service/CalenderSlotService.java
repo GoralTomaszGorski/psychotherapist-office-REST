@@ -26,7 +26,7 @@ public class CalenderSlotService {
     private final CalenderSlotMapper calenderSlotMapper;
 
     public CalenderSlotDto findSlotById(Long id) {
-        CalenderSlot slot = calenderSlotRepository.findCalenderSlotByIdById(id)
+        CalenderSlot slot = calenderSlotRepository.findCalenderSlotById(id)
 
                 .orElseThrow(() -> new RuntimeException("Calender slot not found id:" + id));
         return calenderSlotMapper.toDto(slot);
