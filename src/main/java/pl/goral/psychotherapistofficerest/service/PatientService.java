@@ -37,8 +37,8 @@ public class PatientService {
     }
 
     public PatientResponseDto findPatientById(Long id) {
-        Patient patient = Optional.ofNullable(patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found")));
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
         return patientMapper.toResponseDto(patient);
     }
 
