@@ -37,7 +37,7 @@ public class AppointmentService {
 
 
     public List<AppointmentResponseDto> findAllAppointments() {
-        return appointmentRepository.findAllByCalenderIsNotNullOrderByCalender()
+        return appointmentRepository.findAllByCalenderSlotIsNotNullOrderByCalenderSlot()
                 .stream()
                 .map(AppointmentDtoMapper::toDto)
                 .toList();
