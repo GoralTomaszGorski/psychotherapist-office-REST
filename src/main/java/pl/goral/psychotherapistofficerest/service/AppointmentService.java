@@ -3,13 +3,9 @@ package pl.goral.psychotherapistofficerest.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.goral.psychotherapistofficerest.dto.request.AppointmentRequestDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
-import pl.goral.psychotherapistofficerest.model.CalenderSlot;
-import pl.goral.psychotherapistofficerest.model.Patient;
-import pl.goral.psychotherapistofficerest.model.Therapy;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
 
 import java.util.List;
@@ -25,11 +21,12 @@ public class AppointmentService {
     private final AppointmentDtoMapper appointmentDtoMapper;
 
     @Transactional
-    public Appointment createAppointment(Patient patient, Therapy therapy, CalenderSlot calenderSlot, String status) {
-        Appointment appointment = Appointment.builder()
-                .patient(patient)
-                .therapy(therapy)
-                .calenderSlot(calenderSlot)
+    public Appointment createAppointment(Long patientId, Long therapyId, Long calenderSlotId, String status) {
+        Appointment appointment = Appointment
+                .builder()
+                .patient(patientService.getPatientById(patientId))
+                .therapy(therapyService.getTherapyById(therapyId))
+                .calenderSlot(calenderSlotService.getSlotById(calenderSlotId))
                 .status(status)
                 .build();
         return appointmentRepository.save(appointment);
