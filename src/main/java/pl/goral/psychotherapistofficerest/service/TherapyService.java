@@ -60,4 +60,8 @@ public class TherapyService {
         return therapyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Therapy not found"));
     }
+
+    public void deleteAllTherapies() {
+        therapyRepository.deleteAll();
+    }
 }

@@ -87,4 +87,8 @@ public class PatientService {
         }
         patientRepository.deleteById(id);
     }
+
+    public void deleteAllPatients() {
+        patientRepository.deleteAll();
+    }
 }
