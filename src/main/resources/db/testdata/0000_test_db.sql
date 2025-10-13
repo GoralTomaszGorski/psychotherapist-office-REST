@@ -36,6 +36,7 @@ CREATE TABLE appointment (
                              patient_id BIGINT,
                              therapy_id BIGINT,
                              calender_id BIGINT,
+                             status VARCHAR(20),
                              FOREIGN KEY (patient_id) REFERENCES patient(id),
                              FOREIGN KEY (therapy_id) REFERENCES therapy(id),
                              FOREIGN KEY (calender_id) REFERENCES calender(id)
