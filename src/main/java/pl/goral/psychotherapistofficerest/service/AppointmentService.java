@@ -3,7 +3,9 @@ package pl.goral.psychotherapistofficerest.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
+import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
@@ -56,6 +58,9 @@ public class AppointmentService {
 
     @Transactional
     public void deleteAppointment(Long id) {
-        appointmentRepository.deleteById(id);
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Appointment with id " + id + " not found")
+        );
+        appointmentRepository.delete(appointment);
     }
 }
