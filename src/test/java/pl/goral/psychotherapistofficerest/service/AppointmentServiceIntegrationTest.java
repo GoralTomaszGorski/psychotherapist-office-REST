@@ -11,7 +11,6 @@ import pl.goral.psychotherapistofficerest.dto.request.PatientRequestDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
 import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.model.Appointment;
-import pl.goral.psychotherapistofficerest.model.Patient;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
 import pl.goral.psychotherapistofficerest.repository.CalenderSlotRepository;
 import pl.goral.psychotherapistofficerest.repository.PatientRepository;
@@ -46,7 +45,6 @@ class AppointmentServiceIntegrationTest {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-
     private PatientResponseDto testPatient;
     private TherapyDto testTherapy;
     private CalenderSlotDto testSlot;
@@ -59,7 +57,7 @@ class AppointmentServiceIntegrationTest {
         testSlot = calenderSlotService.createCalenderSlot(createTestCalenderSlotDto());
     }
 
-    private  void deleteAll() {
+    private void deleteAll() {
         appointmentRepository.deleteAll();
         calenderSlotRepository.deleteAll();
         therapyRepository.deleteAll();
@@ -98,47 +96,47 @@ class AppointmentServiceIntegrationTest {
     }
 
 
-
-
     @Test
     void shouldCreateAppointment() {
         Appointment appointment = appointmentService.createAppointment(testPatient.getId(), testTherapy.getId(), testSlot.getId(),
-                        "SCHEDULED");
+                "SCHEDULED");
         assertThat(appointment.getId()).isNotNull();
         assertThat(appointment.getStatus()).isEqualTo("SCHEDULED");
     }
 
-//    @Test
-//    void shouldFindAllAppointments() {
-//        appointmentService.createAppointment(testPatient, testTherapy, testSlot, "SCHEDULED");
-//        List<AppointmentResponseDto> all = appointmentService.findAllAppointments();
-//        assertThat(all).isNotEmpty();
-//        assertThat(all.get(0).getPatientId()).isEqualTo(testPatient.getId());
-//    }
-//
-//    @Test
-//    void shouldFindByPatientId() {
-//        appointmentService.createAppointment(testPatient, testTherapy, testSlot, "SCHEDULED");
-//        List<AppointmentResponseDto> found = appointmentService.findByPatientId(testPatient.getId());
-//        assertThat(found).isNotEmpty();
-//        assertThat(found.get(0).getPatientId()).isEqualTo(testPatient.getId());
-//    }
-//
-//    @Test
-//    void shouldFindByStatus() {
-//        appointmentService.createAppointment(testPatient, testTherapy, testSlot, "FINISHED");
-//        List<AppointmentResponseDto> found = appointmentService.findByStatus("FINISHED");
-//        assertThat(found).isNotEmpty();
-//        assertThat(found.get(0).getStatus()).isEqualTo("FINISHED");
-//    }
+    @Test
+    void shouldFindAllAppointments() {
+        Appointment appointment = appointmentService.createAppointment(testPatient.getId(), testTherapy.getId(), testSlot.getId(),
+                "SCHEDULED");
+        List<AppointmentResponseDto> all = appointmentService.findAllAppointments();
+        assertThat(all).isNotEmpty();
+        assertThat(all.get(0).getPatientId()).isEqualTo(testPatient.getId());
+    }
 
-//    @Test
-//    void shouldDeleteAppointment() {
-//        Appointment appointment = appointmentService.createAppointment(testPatient, testTherapy, testSlot, "CANCELLED");
-//        Long id = appointment.getId();
-//        appointmentService.deleteAppointment(id);
-//
-//        List<AppointmentResponseDto> all = appointmentService.findAllAppointments();
-//        assertThat(all).noneMatch(a -> a.getId().equals(id));
-//    }
+    @Test
+    void shouldFindByPatientId() {
+        Appointment appointment = appointmentService.createAppointment(testPatient.getId(), testTherapy.getId(), testSlot.getId(),
+                "SCHEDULED");
+        List<AppointmentResponseDto> found = appointmentService.findByPatientId(testPatient.getId());
+        assertThat(found).isNotEmpty();
+        assertThat(found.get(0).getPatientId()).isEqualTo(testPatient.getId());
+    }
+
+    @Test
+    void shouldFindByStatus() {
+        appointmentService.createAppointment(testPatient.getId(), testTherapy.getId(), testSlot.getId(), "FINISHED");
+        List<AppointmentResponseDto> found = appointmentService.findByStatus("FINISHED");
+        assertThat(found).isNotEmpty();
+        assertThat(found.get(0).getStatus()).isEqualTo("FINISHED");
+    }
+
+    @Test
+    void shouldDeleteAppointment() {
+        Appointment appointment = appointmentService.createAppointment(testPatient.getId(), testTherapy.getId(), testSlot.getId(), "CANCELLED");
+        Long id = appointment.getId();
+        appointmentService.deleteAppointment(id);
+
+        List<AppointmentResponseDto> all = appointmentService.findAllAppointments();
+        assertThat(all).noneMatch(a -> a.getId().equals(id));
+    }
 }
