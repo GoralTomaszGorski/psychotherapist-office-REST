@@ -3,9 +3,7 @@ package pl.goral.psychotherapistofficerest.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
-import pl.goral.psychotherapistofficerest.dto.response.PatientResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
@@ -51,6 +49,13 @@ public class AppointmentService {
 
     public List<AppointmentResponseDto> findByStatus(String status) {
         return appointmentRepository.findByStatus(status)
+                .stream()
+                .map(AppointmentDtoMapper::toDto)
+                .toList();
+    }
+
+    public List<AppointmentResponseDto> searchAppointments(String keyword) {
+        return appointmentRepository.searchAppointmentsByKeyword(keyword)
                 .stream()
                 .map(AppointmentDtoMapper::toDto)
                 .toList();
