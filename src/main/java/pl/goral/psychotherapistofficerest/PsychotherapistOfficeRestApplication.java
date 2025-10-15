@@ -22,6 +22,7 @@ public class PsychotherapistOfficeRestApplication {
             
             SpringApplication.run(PsychotherapistOfficeRestApplication.class, args);
             logger.info("Aplikacja została uruchomiona pomyślnie");
+            logger.info("http://localhost:8091/api/swagger-ui/index.html");
         } catch (Exception e) {
             logger.error("Błąd podczas uruchamiania aplikacji", e);
             System.exit(1);
