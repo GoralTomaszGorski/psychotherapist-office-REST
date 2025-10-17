@@ -80,4 +80,11 @@ public class AppointmentController {
         appointmentService.deleteAppointment(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/keyword/{keyword}")
+    @Operation(summary = "Search appointments by keyword", description = "Returns appointments matching the given keyword")
+    public ResponseEntity<List<AppointmentResponseDto>> searchByKeyword(@PathVariable String keyword) {
+        return ResponseEntity.ok(appointmentService.searchAppointments(keyword));
+    }
+
 }
