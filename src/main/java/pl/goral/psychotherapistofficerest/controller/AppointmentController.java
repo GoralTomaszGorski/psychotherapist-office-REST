@@ -78,13 +78,43 @@ public class AppointmentController {
     })
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .header("message", "Appointment deleted successfully")
+                .header("appointment-id", id.toString())
+                .build();
     }
 
     @GetMapping("/keyword/{keyword}")
     @Operation(summary = "Search appointments by keyword", description = "Returns appointments matching the given keyword")
     public ResponseEntity<List<AppointmentResponseDto>> searchByKeyword(@PathVariable String keyword) {
         return ResponseEntity.ok(appointmentService.searchAppointments(keyword));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update appointment", description = "Updates an existing appointment by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointment updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Appointment not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid data provided")
+    })
+    public ResponseEntity<AppointmentResponseDto> updateAppointment(
+            @PathVariable Long id,
+            @RequestBody AppointmentRequestDto request) {
+        Appointment appointment = appointmentService.updateAppointment(id, request);
+        AppointmentResponseDto response = AppointmentResponseDto.builder()
+                .id(appointment.getId())
+                .patientId(appointment.getPatient().getId())
+                .patientName(appointment.getPatient().getName())
+                .patientSurname(appointment.getPatient().getSurname())
+                .therapyId(appointment.getTherapy().getId())
+                .therapyKind(appointment.getTherapy().getKindOfTherapy())
+                .calenderId(appointment.getCalenderSlot().getId())
+                .date(appointment.getCalenderSlot().getDate())
+                .time(appointment.getCalenderSlot().getTime())
+                .status(appointment.getStatus())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 }
