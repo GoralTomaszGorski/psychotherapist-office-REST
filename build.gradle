@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.2'
+}
+
+group = 'pl.goral'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+
+dependencies {
+    // Use Spring Boot starter web (includes spring-web, spring-webmvc and embedded Tomcat/servlet API)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Other Spring starters
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // JWT (jjwt)
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // OpenAPI / Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    // DB / Liquibase
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql:42.7.4'
+    implementation 'org.liquibase:liquibase-core'
+
+    // JSON/Date
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // MapStruct + Lombok
+    implementation 'org.mapstruct:mapstruct:1.6.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    // Mail
+    implementation 'com.sun.mail:jakarta.mail:2.0.2'
+
+    // Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        // wymuś spójną wersję spring jeśli potrzeba
+        force 'org.springframework:spring-web:6.2.8'
+        force 'org.springframework:spring-webmvc:6.2.8'
+        force 'org.springframework:spring-core:6.2.8'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(21)
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
