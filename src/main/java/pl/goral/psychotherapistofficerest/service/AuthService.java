@@ -1,6 +1,5 @@
 package pl.goral.psychotherapistofficerest.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.security.authentication.AuthenticationManager;

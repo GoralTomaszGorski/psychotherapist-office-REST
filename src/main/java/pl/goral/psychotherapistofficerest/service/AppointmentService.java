@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
 import pl.goral.psychotherapistofficerest.dto.request.AppointmentRequestDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
+import pl.goral.psychotherapistofficerest.exception.ResourceNotFoundException;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
 import pl.goral.psychotherapistofficerest.model.SlotStatus;
@@ -91,9 +92,9 @@ public class AppointmentService {
     @Transactional
     public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Appointment with id " + id + " not found"
-                ));
+                () -> new ResourceNotFoundException("Appointment with id " + id + " not found")
+        );
+        appointmentRepository.delete(appointment);
         appointmentRepository.delete(appointment);
         CalenderSlotDto calenderSlotDto = calenderSlotService.findSlotById(appointment.getCalenderSlot().getId());
         calenderSlotDto.setStatus(SlotStatus.FREE.name());
