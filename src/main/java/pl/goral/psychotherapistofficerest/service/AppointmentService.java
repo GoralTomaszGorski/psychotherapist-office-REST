@@ -1,11 +1,16 @@
 package pl.goral.psychotherapistofficerest.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
+import pl.goral.psychotherapistofficerest.dto.request.AppointmentRequestDto;
 import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
+import pl.goral.psychotherapistofficerest.model.SlotStatus;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
 
 import java.util.List;
@@ -29,6 +34,28 @@ public class AppointmentService {
                 .calenderSlot(calenderSlotService.getSlotById(calenderSlotId))
                 .status(status)
                 .build();
+        return appointmentRepository.save(appointment);
+    }
+
+    @Transactional
+    public Appointment updateAppointment(Long id, AppointmentRequestDto requestDto) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Appointment with id " + id + " not found"
+                ));
+
+        if (requestDto.getPatientId() != null) {
+            appointment.setPatient(patientService.getPatientById(requestDto.getPatientId()));
+        }
+        if (requestDto.getTherapyId() != null) {
+            appointment.setTherapy(therapyService.getTherapyById(requestDto.getTherapyId()));
+        }
+        if (requestDto.getCalenderSlotId() != null) {
+            appointment.setCalenderSlot(calenderSlotService.getSlotById(requestDto.getCalenderSlotId()));
+        }
+        if (requestDto.getStatus() != null) {
+            appointment.setStatus(requestDto.getStatus());
+        }
         return appointmentRepository.save(appointment);
     }
 
@@ -64,8 +91,12 @@ public class AppointmentService {
     @Transactional
     public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Appointment with id " + id + " not found")
-        );
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Appointment with id " + id + " not found"
+                ));
         appointmentRepository.delete(appointment);
+        CalenderSlotDto calenderSlotDto = calenderSlotService.findSlotById(appointment.getCalenderSlot().getId());
+        calenderSlotDto.setStatus(SlotStatus.FREE.name());
+        calenderSlotService.updateSlot(calenderSlotDto.getId(), calenderSlotDto);
     }
 }
