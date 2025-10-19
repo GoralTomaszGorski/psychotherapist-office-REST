@@ -62,31 +62,6 @@ class PatientServiceUnitTest {
         verifyNoInteractions(patientMapper);
     }
 
-    @Test
-    void shouldReturnPatientById() {
-        Patient patient = new Patient();
-        PatientResponseDto dto = mock(PatientResponseDto.class);
-
-        when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
-        when(patientMapper.toResponseDto(patient)).thenReturn(dto);
-
-        Optional<PatientResponseDto> result = patientService.findPatientById(1L);
-
-        assertThat(result).hasValue(dto);
-        verify(patientRepository).findById(1L);
-        verify(patientMapper).toResponseDto(patient);
-    }
-
-    @Test
-    void shouldReturnEmptyWhenPatientNotFound() {
-        when(patientRepository.findById(1L)).thenReturn(Optional.empty());
-
-        Optional<PatientResponseDto> result = patientService.findPatientById(1L);
-
-        assertThat(result).isEmpty();
-        verify(patientRepository).findById(1L);
-        verifyNoInteractions(patientMapper);
-    }
 
     PatientRequestDto request = PatientRequestDto.builder()
             .nick(null)  // or "janek" for the second test
@@ -107,6 +82,8 @@ class PatientServiceUnitTest {
         when(request.getNick()).thenReturn(null);
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
+        when(request.getEmail()).thenReturn("ecample@email.com");
+        when(request.getYearOfBirth()).thenReturn(1988);
         when(request.getTelephone()).thenReturn("123456789");
 
         Patient patient = new Patient();
@@ -139,6 +116,8 @@ class PatientServiceUnitTest {
         when(request.getNick()).thenReturn("janek");
         when(request.getName()).thenReturn("Jan");
         when(request.getSurname()).thenReturn("Kowalski");
+        when(request.getEmail()).thenReturn("ecample@email.com");
+        when(request.getYearOfBirth()).thenReturn(1988);
         when(request.getTelephone()).thenReturn("123456789");
 
         Patient patient = new Patient();

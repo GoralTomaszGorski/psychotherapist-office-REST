@@ -14,7 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 class TherapyServiceIntegrationTest {
 
     @Autowired
@@ -37,7 +37,7 @@ class TherapyServiceIntegrationTest {
 
         // then
         assertThat(saved.getId()).isNotNull();
-        TherapyDto found = therapyService.getTherapyById(saved.getId());
+        TherapyDto found = therapyService.findTherapyById(saved.getId());
         assertThat(found.getKindOfTherapy()).isEqualTo("Test therapy");
         assertThat(found.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(200));
 

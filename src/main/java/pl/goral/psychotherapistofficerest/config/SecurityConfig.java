@@ -9,8 +9,9 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,9 +35,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+        return http
+                // 🔒 Wyłączamy CSRF dla REST API (JWT i tak chroni)
+                .csrf(AbstractHttpConfigurer::disable)
+
+                // 🔒 Stateless – bo używasz JWT, a nie sesji
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // 🔒 Pozwala na dostęp do konsoli H2 i swaggera w iframe
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+
+                // 🔒 Konfiguracja autoryzacji
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -45,19 +54,27 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/api/swagger-ui.html",
                                 "/api/swagger-ui/**",
-                                "/api/**", // do usuniecia po implemntacji
+                                "/h2-console/**",
                                 "/api/auth/**",
                                 "/api/index/**",
-                                "/h2-console/**",
-                                "/api/v1/swagger/**",
-                                "/api/v1/docs/**")
-                        .permitAll()
+                                "/api/v1/swagger/**"
+                        ).permitAll()
+
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasRole("USER")
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+                        // na czas deva permitAll dla całego /api/**
+                        // ⚠️ po wdrożeniu usuń to
+                        .requestMatchers("/api/**").permitAll()
+
+                        // reszta wymaga autoryzacji
+                        .anyRequest().authenticated()
+                )
+
+                // 🔒 Dodajemy nasz JWT filter przed UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+
+                .build();
     }
 
     @Bean

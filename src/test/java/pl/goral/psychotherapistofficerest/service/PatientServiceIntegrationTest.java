@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 class PatientServiceIntegrationTest {
 
     @Autowired
@@ -52,9 +52,10 @@ class PatientServiceIntegrationTest {
     }
 
     @Test
-    void shouldReturnEmptyForNotExistingPatient() {
-        Optional<PatientResponseDto> notFound = patientService.findPatientById(99999L);
-        assertThat(notFound).isEmpty();
+    void shouldThrowWhenPatientNotFound() {
+        assertThatThrownBy(() -> patientService.findPatientById(99999L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Patient not found");
     }
 
 

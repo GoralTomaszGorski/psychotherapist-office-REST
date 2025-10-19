@@ -1,27 +1,36 @@
 package pl.goral.psychotherapistofficerest.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "calender")
-
 public class CalenderSlot {
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "dayof")
-    private String dayof;
-    private String time;
-    private boolean free;
 
+    @Column(name = "day_of_week")
+    private String dayOfWeek; // np. "poniedziałek"
+
+    @Column(name = "date")
+    private LocalDate date;   // np. 2025-09-29
+
+    @Column(name = "time")
+    private LocalTime time;      // np. "14.00"
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private SlotStatus status; // FREE, BUSY, CANCELLED, ARCHIVED
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "recurrence")
+    private SlotRecurrence recurrence; // ONCE, WEEKLY, MONTHLY
 }

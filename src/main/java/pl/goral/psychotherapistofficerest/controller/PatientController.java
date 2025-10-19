@@ -47,9 +47,7 @@ public class PatientController {
     })
 
     public ResponseEntity<PatientResponseDto> getPatientById(@PathVariable Long id){
-        return patientService.findPatientById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(patientService.findPatientById(id));
     }
 
     @PostMapping("/")

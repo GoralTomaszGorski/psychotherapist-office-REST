@@ -62,7 +62,7 @@ public class TherapyController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<TherapyDto> getTherapyById(@PathVariable Long id) {
-        return ResponseEntity.ok(therapyService.getTherapyById(id));
+        return ResponseEntity.ok(therapyService.findTherapyById(id));
     }
 
 

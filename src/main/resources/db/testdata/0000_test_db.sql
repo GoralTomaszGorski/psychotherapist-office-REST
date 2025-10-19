@@ -23,11 +23,11 @@ CREATE TABLE therapy (
 -- Create calender table
 CREATE TABLE calender (
                           id BIGSERIAL PRIMARY KEY,
-                          patient_id BIGINT,
-                          dayOf VARCHAR(20),
-                          time VARCHAR(10),
-                          free BOOLEAN,
-                          FOREIGN KEY (patient_id) REFERENCES patient(id)
+                          day_of_week VARCHAR(20),
+                          date DATE,
+                          time TIME,
+                          status VARCHAR(20),
+                          recurrence VARCHAR(20)
 );
 
 -- Create appointment table
@@ -36,6 +36,7 @@ CREATE TABLE appointment (
                              patient_id BIGINT,
                              therapy_id BIGINT,
                              calender_id BIGINT,
+                             status VARCHAR(20),
                              FOREIGN KEY (patient_id) REFERENCES patient(id),
                              FOREIGN KEY (therapy_id) REFERENCES therapy(id),
                              FOREIGN KEY (calender_id) REFERENCES calender(id)

@@ -28,9 +28,18 @@ public class PatientService {
                 .toList();
     }
 
-    public Optional<PatientResponseDto> findPatientById(long id) {
-                return patientRepository.findById(id)
-                        .map(patientMapper::toResponseDto);
+    public Patient getPatientById(Long id) {
+        Optional<Patient> patient = patientRepository.findById(id);
+        if (patient.isEmpty()) {
+            throw new RuntimeException("Patient not found");
+        }
+        return patient.get();
+    }
+
+    public PatientResponseDto findPatientById(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        return patientMapper.toResponseDto(patient);
     }
 
     public PatientResponseDto createPatient(PatientRequestDto request) {
@@ -77,5 +86,9 @@ public class PatientService {
             throw new RuntimeException("Patient not found");
         }
         patientRepository.deleteById(id);
+    }
+
+    public void deleteAllPatients() {
+        patientRepository.deleteAll();
     }
 }
