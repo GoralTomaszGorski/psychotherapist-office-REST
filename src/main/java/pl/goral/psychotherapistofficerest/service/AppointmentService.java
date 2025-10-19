@@ -11,7 +11,6 @@ import pl.goral.psychotherapistofficerest.dto.response.AppointmentResponseDto;
 import pl.goral.psychotherapistofficerest.exception.ResourceNotFoundException;
 import pl.goral.psychotherapistofficerest.mapper.AppointmentDtoMapper;
 import pl.goral.psychotherapistofficerest.model.Appointment;
-import pl.goral.psychotherapistofficerest.model.SlotStatus;
 import pl.goral.psychotherapistofficerest.repository.AppointmentRepository;
 
 import java.util.List;
@@ -24,7 +23,6 @@ public class AppointmentService {
     private final PatientService patientService;
     private final TherapyService therapyService;
     private final CalenderSlotService calenderSlotService;
-    private final AppointmentDtoMapper appointmentDtoMapper;
 
     @Transactional
     public Appointment createAppointment(Long patientId, Long therapyId, Long calenderSlotId, String status) {
@@ -97,7 +95,6 @@ public class AppointmentService {
         appointmentRepository.delete(appointment);
         appointmentRepository.delete(appointment);
         CalenderSlotDto calenderSlotDto = calenderSlotService.findSlotById(appointment.getCalenderSlot().getId());
-        calenderSlotDto.setStatus(SlotStatus.FREE.name());
-        calenderSlotService.updateSlot(calenderSlotDto.getId(), calenderSlotDto);
+        calenderSlotService.setFreeSlotStatus(calenderSlotDto);
     }
 }

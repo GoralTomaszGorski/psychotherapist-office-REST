@@ -1,5 +1,6 @@
 package pl.goral.psychotherapistofficerest.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.goral.psychotherapistofficerest.dto.CalenderSlotDto;
@@ -22,8 +23,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CalenderSlotService {
 
+    private static final Locale POLISH_LOCALE = Locale.forLanguageTag("pl");
+
     private final CalenderSlotRepository calenderSlotRepository;
     private final CalenderSlotMapper calenderSlotMapper;
+
 
     public CalenderSlotDto findSlotById(Long id) {
         CalenderSlot slot = calenderSlotRepository.findCalenderSlotById(id)
@@ -32,22 +36,22 @@ public class CalenderSlotService {
         return calenderSlotMapper.toDto(slot);
     }
 
-    public CalenderSlot getSlotById(Long id){
-        Optional<CalenderSlot> slot = calenderSlotRepository.findById(id);
-        if (slot.isEmpty()) {
-            throw new RuntimeException("CalendarSlot not found");
-        }
-        return slot.get();
 
+    public CalenderSlot getSlotById(Long id){
+        return calenderSlotRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("CalendarSlot not found id: " + id));
     }
 
-    public CalenderSlotDto setSlot(CalenderSlotDto slotDto) {
+    @Transactional
+    public
+    CalenderSlotDto setFreeSlotStatus(CalenderSlotDto slotDto) {
         CalenderSlot calenderSlot = calenderSlotMapper.toEntity(slotDto);
         calenderSlot.setStatus(SlotStatus.FREE);
         calenderSlotRepository.save(calenderSlot);
         return calenderSlotMapper.toDto(calenderSlot);
     }
 
+    @Transactional
     public CalenderSlotDto setSlotStatus(Long id, SlotStatus status) {
         CalenderSlot slot = calenderSlotRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
@@ -76,6 +80,7 @@ public class CalenderSlotService {
                 .toList();
     }
 
+    @Transactional
     public List<CalenderSlotDto> createRecurringSlots(CalenderSlotDto template, int count) {
         List<CalenderSlotDto> slots = new ArrayList<>();
         LocalDate startDate = template.getDate();
@@ -92,27 +97,28 @@ public class CalenderSlotService {
                 default -> throw new IllegalArgumentException("Unknown recurrence: " + recurrence);
             }
             CalenderSlotDto slot = CalenderSlotDto.builder()
-                    .dayOfWeek(slotDate.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pl")))
+                    .dayOfWeek(slotDate.getDayOfWeek().getDisplayName(TextStyle.FULL, POLISH_LOCALE))
                     .date(slotDate)
                     .time(time)
                     .recurrence(recurrence.name())
-                    .status("FREE")
+                    .status(SlotStatus.FREE.name())
                     .build();
             CalenderSlot entity = calenderSlotMapper.toEntity(slot);
             calenderSlotRepository.save(entity);
             slots.add(calenderSlotMapper.toDto(entity));
-            if (recurrence == SlotRecurrence.ONCE) break; // tylko jeden slot
+            if (recurrence == SlotRecurrence.ONCE) break;
         }
         return slots;
     }
 
+    @Transactional
     public void deleteSlot(Long id) {
         if (!calenderSlotRepository.existsById(id)) {
             throw new RuntimeException("Slot not found");
         }
         calenderSlotRepository.deleteById(id);
     }
-
+    @Transactional
     public void deleteAllSlots() {
         calenderSlotRepository.deleteAll();
     }
@@ -123,6 +129,7 @@ public class CalenderSlotService {
         return calenderSlotMapper.toDto(calenderSlot);
     }
 
+    @Transactional
     public CalenderSlotDto updateSlot(Long id, CalenderSlotDto slotDto) {
         CalenderSlot slot = calenderSlotRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
