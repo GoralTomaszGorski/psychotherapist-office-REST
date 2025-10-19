@@ -25,3 +25,4 @@ jobs:
 
       - name: Build and test with Gradle
         run: ./gradlew clean test -Dspring.profiles.active=dev
+          ./gradlew clean bootRun --args='--spring.profiles.active=dev'
