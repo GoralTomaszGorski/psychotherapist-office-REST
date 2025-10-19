@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.2'
+    id 'jacoco'
 }
 
 group = 'pl.goral'
@@ -18,44 +19,33 @@ repositories {
     maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-
 dependencies {
-    // Use Spring Boot starter web (includes spring-web, spring-webmvc and embedded Tomcat/servlet API)
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    // Other Spring starters
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // JWT (jjwt)
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
-    // OpenAPI / Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    // DB / Liquibase
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql:42.7.4'
     implementation 'org.liquibase:liquibase-core'
 
-    // JSON/Date
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-    // MapStruct + Lombok
     implementation 'org.mapstruct:mapstruct:1.6.0'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    // Mail
     implementation 'com.sun.mail:jakarta.mail:2.0.2'
 
-    // Tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'   // lub aktualna wersja
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
     testImplementation 'org.springframework.security:spring-security-test'
 }
@@ -68,7 +58,6 @@ configurations {
 
 configurations.all {
     resolutionStrategy {
-        // wymuś spójną wersję spring jeśli potrzeba
         force 'org.springframework:spring-web:6.2.8'
         force 'org.springframework:spring-webmvc:6.2.8'
         force 'org.springframework:spring-core:6.2.8'
@@ -80,18 +69,43 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.addAll(['-Xlint:deprecation'])
 }
 
-//tasks.withType(JavaCompile).configureEach {
-//    options.release.set(21)
-//    options.compilerArgs.addAll(['-Xlint:deprecation'])
-//}
 tasks.withType(Test) {
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
     }
     reports {
-        // W Gradle 9+ używamy 'required' zamiast 'enabled'
         junitXml.required.set(true)
         html.required.set(true)
     }
+}
+
+/* JaCoCo configuration */
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+// Konfigurujemy istniejące zadania typu JacocoReport (w tym domyślny jacocoTestReport)
+tasks.withType(org.gradle.testing.jacoco.tasks.JacocoReport).configureEach {
+    dependsOn tasks.test
+
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+    }
+
+    // źródła/klasy
+    def ss = project.sourceSets
+
+    // executionData - pliki .exec generowane przez testy
+    executionData.setFrom(fileTree(dir: "${buildDir}", includes: [
+            "jacoco/*.exec",
+            "**/jacoco/*.exec",
+            "**/test.exec",
+            "**/*.exec"
+    ]))
+
+    classDirectories.setFrom(files(ss.main.output))
+    sourceDirectories.setFrom(files(ss.main.allSource.srcDirs))
 }

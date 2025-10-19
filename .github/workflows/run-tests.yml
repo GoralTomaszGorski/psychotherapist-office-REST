@@ -26,6 +26,10 @@ jobs:
       - name: Build and test with Gradle
         run: ./gradlew --no-daemon clean test -Dspring.profiles.active=dev
 
+      - name: Generate JaCoCo coverage report
+        if: always()
+        run: ./gradlew jacocoTestReport --no-daemon
+
       - name: Upload test results (JUnit XML)
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,3 +43,10 @@ jobs:
         with:
           name: test-report-html
           path: build/reports/tests/test
+
+      - name: Upload JaCoCo report (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-html
+          path: build/reports/jacoco/test
