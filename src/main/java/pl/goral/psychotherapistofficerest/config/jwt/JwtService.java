@@ -1,15 +1,13 @@
 package pl.goral.psychotherapistofficerest.config.jwt;
-
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
@@ -23,10 +21,9 @@ public class JwtService {
 
     private Key key;
 
-    // Inicjalizacja klucza po wstrzyknięciu wartości secret
     @PostConstruct
     public void init() {
-        // Zalecane: minimum 256-bit dla HS256
+        // 256-bit secret (HS256)
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
@@ -41,7 +38,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    // Generowanie tokena z domyślnymi claimami
+    // Generowanie tokena bez dodatkowych claimów
     public String generateToken(UserDetails userDetails) {
         return generateToken(Map.of(), userDetails);
     }
@@ -50,11 +47,11 @@ public class JwtService {
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         long expirationTimeMs = 1000 * 60 * 60 * 24; // 24h
         return Jwts.builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeMs))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationTimeMs))
+                .signWith(key)
                 .compact();
     }
 
@@ -73,12 +70,11 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        // nowa metoda w jjwt 0.11.x
         return Jwts.parser()
-                .setSigningKey(key)
+                .verifyWith((SecretKey) key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
     }
 }

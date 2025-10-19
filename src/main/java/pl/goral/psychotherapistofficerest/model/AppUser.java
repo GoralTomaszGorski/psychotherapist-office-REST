@@ -30,7 +30,7 @@ public class AppUser implements UserDetails {
     private String password;
 
 
-
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -39,6 +39,7 @@ public class AppUser implements UserDetails {
     )
     private Set<UserRole> roles = new HashSet<>();
 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> (GrantedAuthority) () -> "ROLE_" + role.getName())
