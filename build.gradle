@@ -55,6 +55,8 @@ dependencies {
 
     // Tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'   // lub aktualna wersja
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
@@ -75,10 +77,21 @@ configurations.all {
 
 tasks.withType(JavaCompile).configureEach {
     options.release.set(21)
-    options.compilerArgs << "-Xlint:-deprecation"
+    options.compilerArgs.addAll(['-Xlint:deprecation'])
 }
 
-
+//tasks.withType(JavaCompile).configureEach {
+//    options.release.set(21)
+//    options.compilerArgs.addAll(['-Xlint:deprecation'])
+//}
 tasks.withType(Test) {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    reports {
+        // W Gradle 9+ używamy 'required' zamiast 'enabled'
+        junitXml.required.set(true)
+        html.required.set(true)
+    }
 }
